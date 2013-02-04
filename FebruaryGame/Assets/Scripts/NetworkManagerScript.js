@@ -1,12 +1,11 @@
-var playerPrefabEvil:GameObject;
-var playerPrefabGood:GameObject;
+var playerPrefab:GameObject;
 var spawn1:GameObject;
 var spawn2:GameObject;
 var spawn3:GameObject;
 var spawn4:GameObject;
 var spawn5:GameObject;
 private var spawnObject:GameObject;
-var gameName:String = "OxyOxspringNetworking";
+var gameName:String = "OxyOxspringFebNetworking";
 private var stringToEdit : String = "Input Username";
 private var displayString : String = "";
 
@@ -24,13 +23,12 @@ function Start(){
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
-	playerPrefabEvil.camera.enabled = true;
-	playerPrefabGood.camera.enabled = true;
+	playerPrefab.camera.enabled = true;
 }
 
 function startServer(){
 Network.InitializeServer(32,25001,!Network.MovePublicAddress);
-MasterServer.RegisterHost(gameName,"Hunter Or Hunter", "Join Local Game");
+MasterServer.RegisterHost(gameName,"Hideous", "Join Hideous Game");
 }
 
 function refreshHostList(){
@@ -51,17 +49,8 @@ function Update(){
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
-	Network.Instantiate(playerPrefabGood, spawnObject.transform.position, Quaternion.identity,0);
-	playerPrefabGood.camera.enabled = false;
-	playerPrefabEvil.camera.enabled = false;
-}
-
-function spawnHunter(){
-networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
-chooseSpawn();
-Network.Instantiate(playerPrefabEvil, spawnObject.transform.position, Quaternion.identity,0);
-	playerPrefabEvil.camera.enabled = false;
-	playerPrefabGood.camera.enabled = false;
+	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	playerPrefab.camera.enabled = false;
 }
 
 function chooseSpawn(){
@@ -90,8 +79,7 @@ break;
 function OnServerInitialized(){
 	Debug.Log("Server Initialised!");
 	//script.enabled = true;
-	spawnHunter();
-	
+	spawnPlayer();
 }
 
 function OnConnectedToServer(){
@@ -146,17 +134,7 @@ function OnGUI(){
 	}
 }
 
-function AttackedFish(){
-networkView.RPC("updateStringAttack",RPCMode.AllBuffered,stringToEdit);
-}
 
-function DeadFish(){
-networkView.RPC("updateStringDead",RPCMode.AllBuffered,stringToEdit);
-}
-
-function EscapeFish(){
-networkView.RPC("updateStringEscape",RPCMode.AllBuffered,stringToEdit);
-}
 
 @RPC
 function updateString(str:String){
@@ -164,17 +142,3 @@ displayString = str + " has joined the game!";
 }
 
 
-@RPC
-function updateStringAttack(str:String){
-displayString = "The shark has bitten " + str + "!";
-}
-
-@RPC
-function updateStringDead(str:String){
-displayString = str + " has been devoured! Oh dear!";
-}
-
-@RPC
-function updateStringEscape(str:String){
-displayString = str + " has escaped from the shark...";
-}
