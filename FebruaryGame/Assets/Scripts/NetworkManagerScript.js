@@ -51,6 +51,8 @@ networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	playerPrefab.transform.Find("Camera").camera.enabled = false;
+	networkView.RPC("lightsOff",RPCMode.AllBuffered,stringToEdit);
+	playerPrefab.light.enabled = true;
 }
 
 function chooseSpawn(){
@@ -141,4 +143,8 @@ function updateString(str:String){
 displayString = str + " has joined the game!";
 }
 
+@RPC
+function lightsOff(str:String){
+playerPrefab.light.enabled = false;
+}
 
