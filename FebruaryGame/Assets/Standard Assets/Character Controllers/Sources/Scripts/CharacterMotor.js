@@ -324,6 +324,8 @@ private function UpdateFunction () {
 	{
 		// Toggle the inputCrouch variable.
 		inputCrouch = !inputCrouch;
+		
+		BroadcastMessage("Crouch");
 	}
 	
 	if (inputCrouch)
@@ -387,8 +389,11 @@ function FixedUpdate () {
 }
 
 function Update () {
-	if (!useFixedUpdate)
-		UpdateFunction();
+	if (networkView.isMine)
+	{
+		if (!useFixedUpdate)
+			UpdateFunction();
+	}
 }
 
 private function ApplyInputVelocityChange (velocity : Vector3) {	

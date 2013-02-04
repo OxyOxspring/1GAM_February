@@ -23,7 +23,7 @@ function Start(){
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
-	playerPrefab.camera.enabled = true;
+	playerPrefab.transform.Find("Camera").camera.enabled = true;
 }
 
 function startServer(){
@@ -50,7 +50,7 @@ function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	playerPrefab.camera.enabled = false;
+	playerPrefab.transform.Find("Camera").camera.enabled = false;
 }
 
 function chooseSpawn(){
