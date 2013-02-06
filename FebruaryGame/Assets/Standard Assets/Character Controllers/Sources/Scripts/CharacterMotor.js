@@ -21,6 +21,7 @@ var inputJump : boolean = false;
 
 // Whether the crouch button has been pressed.
 var inputCrouch : boolean = true;
+var inputCrouchPrev : boolean = true;
 var fullyCrouched : float = 0.4f;
 var fullyStood : float = 1.0f;
 var crouchSpeed : float = 0.05f;
@@ -320,14 +321,23 @@ private function UpdateFunction () {
         movingPlatform.activeLocalRotation = Quaternion.Inverse(movingPlatform.activePlatform.rotation) * movingPlatform.activeGlobalRotation; 
 	}
 	
-	if (Input.GetKeyDown(KeyCode.LeftControl))
+	if (Input.GetAxis("Crouch") != 0)
 	{
-		// Toggle the inputCrouch variable.
-		inputCrouch = !inputCrouch;
-		
-		BroadcastMessage("Crouch");
+		if (inputCrouchPrev == false)
+		{
+			// Toggle the inputCrouch variable.
+			inputCrouch = !inputCrouch;
+			
+			BroadcastMessage("Crouch");
+		}
+		inputCrouchPrev = true;
+	}
+	else
+	{
+		inputCrouchPrev = false;
 	}
 	
+	// Crouch
 	if (inputCrouch)
 	{
 		forwardSpeed = crouchForwardSpeed;
@@ -346,21 +356,33 @@ private function UpdateFunction () {
 		}
 	}
 	else
-	{
-		forwardSpeed = walkForwardSpeed;
-		sidewaysSpeed = walkSidewaysSpeed;
-		backwardsSpeed = walkBackwardsSpeed;
-		
-		if (transform.localScale.y < fullyStood)	
+	{	
+		// Check if the player is able to stand by casting rays from the bottom of the player (player y + half crouch scale) upwards.
+		if (Physics.Raycast(new Vector3(transform.position.x + transform.localScale.x / 2, transform.position.y - transform.localScale.y / 2, transform.position.z), transform.up, fullyStood) == false &&
+		    Physics.Raycast(new Vector3(transform.position.x - transform.localScale.x / 2, transform.position.y - transform.localScale.y / 2, transform.position.z), transform.up, fullyStood) == false &&
+			Physics.Raycast(new Vector3(transform.position.x, transform.position.y - transform.localScale.y / 2, transform.position.z), transform.up, fullyStood) == false &&
+			Physics.Raycast(new Vector3(transform.position.x, transform.position.y + transform.localScale.y / 2, transform.position.z), transform.up, fullyStood) == false)
 		{
-			// Increase the scale.
-			transform.localScale.y += crouchSpeed;
-			transform.position.y += crouchSpeed;
+			forwardSpeed = walkForwardSpeed;
+			sidewaysSpeed = walkSidewaysSpeed;
+			backwardsSpeed = walkBackwardsSpeed;
+			
+			if (transform.localScale.y < fullyStood)	
+			{
+				// Increase the scale.
+				transform.localScale.y += crouchSpeed;
+				transform.position.y += crouchSpeed;
+			}
+			else
+			{
+				// Fix the scale.
+				transform.localScale.y = fullyStood;
+			}
 		}
-		else
+		else if (transform.localScale.y < fullyStood)
 		{
-			// Fix the scale.
-			transform.localScale.y = fullyStood;
+			inputCrouch = true;
+			BroadcastMessage("Crouch");
 		}
 	}
 }

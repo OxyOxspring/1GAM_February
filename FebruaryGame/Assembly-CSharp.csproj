@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\HeadBobbing.cs" />
      <Compile Include="Assets\Scripts\Lightning.cs" />
+     <Compile Include="Assets\Scripts\WindRotation.cs" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
   </ItemGroup>
   <ItemGroup>
