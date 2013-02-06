@@ -1,4 +1,5 @@
 var playerPrefab:GameObject;
+var RatPrefab:GameObject;
 var spawn1:GameObject;
 var spawn2:GameObject;
 var spawn3:GameObject;
@@ -50,6 +51,7 @@ function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	playerPrefab.transform.Find("Camera").camera.enabled = false;
 	networkView.RPC("lightsOff",RPCMode.AllBuffered,stringToEdit);
 	playerPrefab.light.enabled = true;
