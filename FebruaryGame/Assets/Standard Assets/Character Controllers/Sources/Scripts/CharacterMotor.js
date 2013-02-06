@@ -192,6 +192,14 @@ private var controller : CharacterController;
 function Awake () {
 	controller = GetComponent (CharacterController);
 	tr = transform;
+	
+	if (networkView.isMine)
+	{
+		transform.Find("Camera").GetComponent("AudioListener").active = true;
+		transform.Find("Camera").camera.enabled = true;
+		transform.Find("RainBox").particleSystem.Play();
+		light.enabled = true;
+	}
 }
 
 private function UpdateFunction () {
@@ -344,15 +352,15 @@ private function UpdateFunction () {
 		sidewaysSpeed = crouchSidewaysSpeed;
 		backwardsSpeed = crouchBackwardsSpeed;
 	
-		if (transform.localScale.y > fullyCrouched)
+		if (this.transform.localScale.y > fullyCrouched)
 		{
 			// Decrease the scale.
-			transform.localScale.y -= crouchSpeed;
+			this.transform.localScale.y -= crouchSpeed;
 		}
 		else
 		{
 			// Fix the scale.
-			transform.localScale.y = fullyCrouched;
+			this.transform.localScale.y = fullyCrouched;
 		}
 	}
 	else
@@ -367,16 +375,16 @@ private function UpdateFunction () {
 			sidewaysSpeed = walkSidewaysSpeed;
 			backwardsSpeed = walkBackwardsSpeed;
 			
-			if (transform.localScale.y < fullyStood)	
+			if (this.transform.localScale.y < fullyStood)	
 			{
 				// Increase the scale.
-				transform.localScale.y += crouchSpeed;
-				transform.position.y += crouchSpeed;
+				this.transform.localScale.y += crouchSpeed;
+				this.transform.position.y += crouchSpeed;
 			}
 			else
 			{
 				// Fix the scale.
-				transform.localScale.y = fullyStood;
+				this.transform.localScale.y = fullyStood;
 			}
 		}
 		else if (transform.localScale.y < fullyStood)

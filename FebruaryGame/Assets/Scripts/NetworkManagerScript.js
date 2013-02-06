@@ -24,7 +24,6 @@ function Start(){
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
-	playerPrefab.transform.Find("Camera").camera.enabled = true;
 }
 
 function startServer(){
@@ -50,11 +49,11 @@ function Update(){
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
+	playerPrefab.transform.Find("Camera").GetComponent("AudioListener").active = false;
+	playerPrefab.transform.Find("Camera").camera.enabled = false;
+	playerPrefab.light.enabled = false;
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	playerPrefab.transform.Find("Camera").camera.enabled = false;
-	networkView.RPC("lightsOff",RPCMode.AllBuffered,stringToEdit);
-	playerPrefab.light.enabled = true;
 }
 
 function chooseSpawn(){
@@ -145,8 +144,4 @@ function updateString(str:String){
 displayString = str + " has joined the game!";
 }
 
-@RPC
-function lightsOff(str:String){
-playerPrefab.light.enabled = false;
-}
 

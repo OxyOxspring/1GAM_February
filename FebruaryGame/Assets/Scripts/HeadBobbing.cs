@@ -22,56 +22,62 @@ public class HeadBobbing : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		float amount = BobFrequency * Time.deltaTime / crouchFactor;
-		
-		if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0)
+		if (networkView.isMine)
 		{
-			bobTimer += amount;
+			float amount = BobFrequency * Time.deltaTime / crouchFactor;
 			
-			if (bobTimer >= Mathf.PI)
-			{
-				bobTimer = 0;
-				
-				footBool = !footBool;
-				
-				if (footBool == true)	
-				{
-					leftFoot.Play ();
-				}
-				else
-				{
-					rightFoot.Play ();
-				}
-			}
-		}
-		else if(bobTimer > 0 && bobTimer < Mathf.PI)
-		{
-			if(bobTimer < Mathf.PI / 2)
-			{
-				bobTimer -= amount;
-			}
-			else if(bobTimer >= Mathf.PI / 2)
+			if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0)
 			{
 				bobTimer += amount;
+				
+				if (bobTimer >= Mathf.PI)
+				{
+					bobTimer = 0;
+					
+					footBool = !footBool;
+					
+					if (footBool == true)	
+					{
+						leftFoot.Play ();
+					}
+					else
+					{
+						rightFoot.Play ();
+					}
+				}
 			}
+			else if(bobTimer > 0 && bobTimer < Mathf.PI)
+			{
+				if(bobTimer < Mathf.PI / 2)
+				{
+					bobTimer -= amount;
+				}
+				else if(bobTimer >= Mathf.PI / 2)
+				{
+					bobTimer += amount;
+				}
+			}
+			else
+			{
+				bobTimer = 0;	
+			}
+			
+			transform.position = new Vector3(transform.position.x, Player.transform.position.y + Player.transform.localScale.y / 2 + BobAmplitude / crouchFactor * Mathf.Sin (bobTimer), transform.position.z);
 		}
-		else
-		{
-			bobTimer = 0;	
-		}
-		
-		transform.position = new Vector3(transform.position.x, Player.transform.position.y + Player.transform.localScale.y / 2 + BobAmplitude / crouchFactor * Mathf.Sin (bobTimer), transform.position.z);
 	}
 			
 	void Crouch()
 	{
-		if (crouchFactor == 2)	
+		if (networkView.isMine)
 		{
-			crouchFactor = 1;
-		}
-		else
-		{
-			crouchFactor = 2;
+			if (crouchFactor == 2)	
+			{
+				crouchFactor = 1;
+			}
+			else
+			{
+				crouchFactor = 2;
+			}
 		}
 	}
 }
