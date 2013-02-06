@@ -28,7 +28,7 @@ function Start(){
 
 function startServer(){
 Network.InitializeServer(32,25001,!Network.MovePublicAddress);
-MasterServer.RegisterHost(gameName,"Hideous", "Join Hideous Game");
+MasterServer.RegisterHost(gameName,"Hideous", "Become Hideous...");
 }
 
 function refreshHostList(){
@@ -49,8 +49,8 @@ function Update(){
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
-	playerPrefab.transform.Find("Camera").GetComponent("AudioListener").active = false;
 	playerPrefab.transform.Find("Camera").camera.enabled = false;
+	playerPrefab.transform.Find("Camera").GetComponent(AudioListener).enabled = false;
 	playerPrefab.light.enabled = false;
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);

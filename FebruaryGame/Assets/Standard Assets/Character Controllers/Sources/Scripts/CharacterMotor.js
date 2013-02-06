@@ -195,8 +195,8 @@ function Awake () {
 	
 	if (networkView.isMine)
 	{
-		transform.Find("Camera").GetComponent("AudioListener").active = true;
 		transform.Find("Camera").camera.enabled = true;
+		transform.Find("Camera").GetComponent(AudioListener).enabled = true;
 		transform.Find("RainBox").particleSystem.Play();
 		light.enabled = true;
 	}

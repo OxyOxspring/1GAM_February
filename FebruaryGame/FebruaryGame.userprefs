@@ -1,13 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CheckVisibility.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Lightning.cs">
     <Files>
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="40" Column="5" />
-      <File FileName="Assets\Scripts\CritterAI.cs" Line="116" Column="4" />
+      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="52" Column="81" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CritterAI.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HeadBobbing.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="198" Column="64" />
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="45" Column="4" />
-      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="38" Column="24" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="199" Column="63" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="51" Column="15" />
+      <File FileName="Assets\Scripts\Lightning.cs" Line="37" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -20,7 +20,7 @@ public class Lightning : MonoBehaviour
 	{
 		if (light.intensity > 0.1f)
 		{
-			light.intensity *= 0.9f;
+			light.intensity *= 0.8f;
 		}
 		else
 		{
@@ -34,7 +34,7 @@ public class Lightning : MonoBehaviour
 			
 			// Make a random delay until the next lightning strike to ensure a lightning strike WILL happen.
 			flashDelay = Random.Range(30, 120);
-			
+
 			// Give the thunder a random delay.
 			thunderDelay = Random.Range (1, 4);	
 
