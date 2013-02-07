@@ -6,8 +6,10 @@ public class CheckVisibility : MonoBehaviour
 	public Camera CameraObject;
 	public float CameraShake = 0.2f;
 	public float Insanity = 0;
-	public float InsanityRate = 20;
+	public float InsanityRate = 80;
 	public bool IsLookingAtSomeone = false;
+	public Color SafeColour;
+	public Color AlarmColour;
 	
 	float InsanityProgress
 	{
@@ -81,6 +83,8 @@ public class CheckVisibility : MonoBehaviour
 				Insanity -= Time.deltaTime * InsanityRate;
 			}
 		}
+		
+		light.color = Color.Lerp (SafeColour, AlarmColour, InsanityProgress);
 		
 		// Shake the camera more as the player gets more scared.
 		CameraObject.transform.localPosition = new Vector3 (Random.Range (-CameraShake, CameraShake) * InsanityProgress, Random.Range (-CameraShake, CameraShake) * InsanityProgress, 0);
