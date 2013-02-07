@@ -54,6 +54,9 @@ chooseSpawn();
 	playerPrefab.light.enabled = false;
 	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
 }
 
 function chooseSpawn(){

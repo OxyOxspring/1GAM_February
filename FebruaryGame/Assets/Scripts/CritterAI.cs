@@ -51,7 +51,7 @@ public class CritterAI : MonoBehaviour {
 		wayPoint.x = wayPoint.x + transform.position.x;
 		wayPoint.z = wayPoint.z + transform.position.z;
 	    wayPoint.y = 0;
-		nextDelayCount = Random.Range (40,100);
+		nextDelayCount = Random.Range (30,40);
 	}
 	
 	// Update is called once per frame:
@@ -122,7 +122,7 @@ public class CritterAI : MonoBehaviour {
 				if (playerSensor.collider.gameObject.name == "Player(Clone)")
 				{
 					//SQUEAK
-					moveSpeed = 10;
+					moveSpeed = 9;
 					moveDelay++;
 					if (moveDelay >= nextDelayCount)
 					{
