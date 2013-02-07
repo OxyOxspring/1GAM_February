@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class Peeping : MonoBehaviour {
+	
+	public float xModifier;
+	public float yModifier;
+	public float zModifier;
 
 	// Use this for initialization
 	void Start () {
@@ -37,11 +41,11 @@ public class Peeping : MonoBehaviour {
 			// Check that a player has been found nearby.
 			if (closestPlayer != null)
 			{
-				transform.LookAt(closestPlayer.transform.position + new Vector3(0, closestPlayer.transform.localScale.y * 0.5f, 0));
-				
-				transform.Rotate (new Vector3(90, 0, 0));
-				
 				/* TOO QUICK? SHOULD ROTATE TOWARDS PLAYER SLOWLY? */
+				
+				Quaternion newRotation = Quaternion.LookRotation(closestPlayer.transform.position - transform.position,Vector3.up); 
+				// Smoothly rotate towards the target .
+				this.transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 2*Time.deltaTime);
 			}
 		}	
 	}
