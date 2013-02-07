@@ -37,7 +37,7 @@ public class Peeping : MonoBehaviour {
 			// Check that a player has been found nearby.
 			if (closestPlayer != null)
 			{
-				transform.LookAt(closestPlayer.transform.position + new Vector3(0, closestPlayer.transform.localScale.y * 0.03f, 0));
+				transform.LookAt(closestPlayer.transform.position + new Vector3(0, closestPlayer.transform.localScale.y * 0.5f, 0));
 				
 				transform.Rotate (new Vector3(90, 0, 0));
 				
