@@ -44,7 +44,9 @@ public class Peeping : MonoBehaviour {
 			// Check that a player has been found nearby.
 			if (closestPlayer != null)
 			{				
-				Quaternion newRotation = Quaternion.LookRotation(closestPlayer.transform.position - transform.position,Vector3.up); 
+				Vector3 lookPosition = new Vector3(closestPlayer.transform.position.x,closestPlayer.transform.position.y + (closestPlayer.transform.localScale.y/2),closestPlayer.transform.position.z);
+				
+				Quaternion newRotation = Quaternion.LookRotation(lookPosition - transform.position,Vector3.up); 
 				
 				// Smoothly rotate towards the target .
 				transform.rotation = uncorrectedRotation = Quaternion.Slerp(uncorrectedRotation, newRotation, 2*Time.deltaTime);

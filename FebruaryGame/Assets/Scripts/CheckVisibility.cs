@@ -4,6 +4,7 @@ using System.Collections;
 public class CheckVisibility : MonoBehaviour
 {
 	public Camera CameraObject;
+	public AudioSource InsaneNoise;
 	public float CameraShake = 0.2f;
 	public float Insanity = 0;
 	public float InsanityRate = 80;
@@ -32,6 +33,8 @@ public class CheckVisibility : MonoBehaviour
 			HandleSanity ();
 			
 			Debug.Log (Insanity.ToString());
+			
+			InsaneNoise.volume = Insanity / 100;
 		}
 	}
 	

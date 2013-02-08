@@ -33,7 +33,7 @@ public class Lightning : MonoBehaviour
 			light.intensity = FlashIntensity;
 			
 			// Make a random delay until the next lightning strike to ensure a lightning strike WILL happen.
-			flashDelay = Random.Range(30, 120);
+			flashDelay = Random.Range(20, 100);
 
 			// Give the thunder a random delay.
 			thunderDelay = Random.Range (1, 4);	
