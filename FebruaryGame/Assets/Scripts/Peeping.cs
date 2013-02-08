@@ -6,10 +6,13 @@ public class Peeping : MonoBehaviour {
 	public float xModifier;
 	public float yModifier;
 	public float zModifier;
+	
+	private Quaternion uncorrectedRotation;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start ()
+	{
+		uncorrectedRotation = transform.rotation;
 	}
 	
 	// Update is called once per frame
@@ -40,12 +43,14 @@ public class Peeping : MonoBehaviour {
 			
 			// Check that a player has been found nearby.
 			if (closestPlayer != null)
-			{
-				/* TOO QUICK? SHOULD ROTATE TOWARDS PLAYER SLOWLY? */
-				
+			{				
 				Quaternion newRotation = Quaternion.LookRotation(closestPlayer.transform.position - transform.position,Vector3.up); 
+				
 				// Smoothly rotate towards the target .
-				this.transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, 2*Time.deltaTime);
+				transform.rotation = uncorrectedRotation = Quaternion.Slerp(uncorrectedRotation, newRotation, 2*Time.deltaTime);
+				
+				// Apply the rotation fix.
+				transform.Rotate (new Vector3(90, 0, 0));
 			}
 		}	
 	}
