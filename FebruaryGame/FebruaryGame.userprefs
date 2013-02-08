@@ -2,7 +2,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CheckVisibility.cs">
     <Files>
-      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="102" Column="18" />
+      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="92" Column="13" />
       <File FileName="Assets\Scripts\Peeping.cs" Line="1" Column="1" />
       <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HeadBobbing.cs" Line="1" Column="1" />

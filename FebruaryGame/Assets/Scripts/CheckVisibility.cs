@@ -64,7 +64,7 @@ public class CheckVisibility : MonoBehaviour
 			if (otherPlayer.transform != transform)
 			{
 				// Check if the other player is in range.
-				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 6)
+				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 7)
 				{
 					// Check if the other player is within the view of this player's camera view.
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))
@@ -87,6 +87,11 @@ public class CheckVisibility : MonoBehaviour
 		// If the player is looking at someone, increase their insanity, else decrease the insanity until it reaches zero.
 		if (IsLookingAtSomeone)
 		{
+			if (Insanity == 0)
+			{
+				//SCREAM	
+			}
+			
 			Insanity += Time.deltaTime * InsanityRate;
 			audiolevel += Mathf.CeilToInt(Time.deltaTime);
 		}
