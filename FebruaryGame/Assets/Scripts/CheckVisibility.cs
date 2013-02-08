@@ -11,6 +11,7 @@ public class CheckVisibility : MonoBehaviour
 	public bool IsLookingAtSomeone = false;
 	public Color SafeColour;
 	public Color AlarmColour;
+	public int audiolevel = 0;
 	
 	float InsanityProgress
 	{
@@ -32,9 +33,18 @@ public class CheckVisibility : MonoBehaviour
 			
 			HandleSanity ();
 			
-			Debug.Log (Insanity.ToString());
+			Debug.Log (audiolevel.ToString());
 			
-			InsaneNoise.volume = Insanity / 100;
+			if(audiolevel > 100)
+			{
+			audiolevel = 100;
+			}
+			if(audiolevel < 0)
+			{
+			audiolevel = 0;
+			}
+			
+			InsaneNoise.volume = (float) audiolevel / 100;
 		}
 	}
 	
@@ -78,12 +88,14 @@ public class CheckVisibility : MonoBehaviour
 		if (IsLookingAtSomeone)
 		{
 			Insanity += Time.deltaTime * InsanityRate;
+			audiolevel += Mathf.CeilToInt(Time.deltaTime);
 		}
 		else
 		{
 			if (Insanity > 0)
 			{
 				Insanity -= Time.deltaTime * InsanityRate;
+				audiolevel -= Mathf.CeilToInt(Time.deltaTime);
 			}
 		}
 		
