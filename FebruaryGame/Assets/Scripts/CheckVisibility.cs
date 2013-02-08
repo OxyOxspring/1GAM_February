@@ -37,11 +37,11 @@ public class CheckVisibility : MonoBehaviour
 			
 			if(audiolevel > 100)
 			{
-			audiolevel = 100;
+				audiolevel = 100;
 			}
 			if(audiolevel < 0)
 			{
-			audiolevel = 0;
+				audiolevel = 0;
 			}
 			
 			InsaneNoise.volume = (float) audiolevel / 100;
@@ -96,6 +96,10 @@ public class CheckVisibility : MonoBehaviour
 			{
 				Insanity -= Time.deltaTime * InsanityRate;
 				audiolevel -= Mathf.CeilToInt(Time.deltaTime);
+			}
+			else
+			{
+				Insanity = 0;	
 			}
 		}
 		
