@@ -13,9 +13,31 @@ public class CheckVisibility : MonoBehaviour
 	public Color AlarmColour;
 	public int audiolevel = 0;
 	
-	float InsanityProgress
+	public float InsanityProgress
 	{
 		get { return Insanity / 100; }
+	}
+	
+	public static bool IsTransformLit(Transform transform)
+	{
+		// Find all lights labelled Light.
+		GameObject[] pointlights = GameObject.FindGameObjectsWithTag("Light");
+		
+		foreach (GameObject pointlight in pointlights)
+		{
+			// Check if the transform is in the range of a light.
+			if (Vector3.Distance (transform.position, pointlight.transform.position) < pointlight.light.range)
+			{
+				// Check shadows. (May have to check from top of model not centre).
+				if (Physics.Linecast (transform.position, pointlight.transform.position, 1) == false)
+				{
+					Debug.DrawLine (transform.position, pointlight.transform.position);
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	// Use this for initialization
@@ -27,6 +49,8 @@ public class CheckVisibility : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		Debug.Log (IsTransformLit (transform) ? "I'm in the light!!" : "I'm not in the light!!");
+		
 		if (networkView.isMine)
 		{			
 			HandleVision ();
@@ -63,8 +87,8 @@ public class CheckVisibility : MonoBehaviour
 			// Ignore self.
 			if (otherPlayer.transform != transform)
 			{
-				// Check if the other player is in range.
-				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 7)
+				// Check if the other player is in range or lit by a point light.
+				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 7 || IsTransformLit (otherPlayer.transform))
 				{
 					// Check if the other player is within the view of this player's camera view.
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))
