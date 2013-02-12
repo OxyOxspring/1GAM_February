@@ -26,11 +26,15 @@ public class CheckVisibility : MonoBehaviour
 		foreach (GameObject pointlight in pointlights)
 		{
 			// Check if the transform is in the range of a light.
-			if (Vector3.Distance (transform.position, pointlight.transform.position) < pointlight.light.range)
+			if (Vector3.Distance (transform.position, pointlight.transform.position) < pointlight.light.range + transform.localScale.x * 0.5f)
 			{
 				// Check shadows. (May have to check from top of model not centre).
-				if (Physics.Linecast (transform.position, pointlight.transform.position, 1) == false)
+				if (Physics.Linecast (transform.position + new Vector3(0, transform.localScale.y * 0.9f, 0), pointlight.transform.position, 1) == false || 
+					Physics.Linecast (transform.position - new Vector3(0, transform.localScale.y * 0.9f, 0), pointlight.transform.position, 1) == false ||
+					Physics.Linecast (transform.position, pointlight.transform.position, 1) == false)
 				{
+					Debug.DrawLine (transform.position + new Vector3(0, transform.localScale.y * 0.9f, 0), pointlight.transform.position);
+					Debug.DrawLine (transform.position - new Vector3(0, transform.localScale.y * 0.9f, 0), pointlight.transform.position);
 					Debug.DrawLine (transform.position, pointlight.transform.position);
 					return true;
 				}
@@ -49,7 +53,7 @@ public class CheckVisibility : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		Debug.Log (IsTransformLit (transform) ? "I'm in the light!!" : "I'm not in the light!!");
+		//Debug.Log (IsTransformLit (transform) ? "I'm in the light!!" : "I'm not in the light!!");
 		
 		if (networkView.isMine)
 		{			
@@ -57,7 +61,7 @@ public class CheckVisibility : MonoBehaviour
 			
 			HandleSanity ();
 			
-			Debug.Log (audiolevel.ToString());
+			InsaneNoise.volume = (float)audiolevel / 100;
 			
 			if(audiolevel > 100)
 			{
@@ -66,9 +70,8 @@ public class CheckVisibility : MonoBehaviour
 			if(audiolevel < 0)
 			{
 				audiolevel = 0;
+				InsaneNoise.volume = 0;
 			}
-			
-			InsaneNoise.volume = (float) audiolevel / 100;
 		}
 	}
 	
@@ -94,10 +97,14 @@ public class CheckVisibility : MonoBehaviour
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))
 					{	
 						// Check if the other player is behind a surface (default layer 1 to ignore players)
-						if (Physics.Linecast (transform.position, otherPlayer.transform.position, 1) == false)
+						if (Physics.Linecast (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0), 1) == false ||
+							Physics.Linecast (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0), 1) == false ||
+							Physics.Linecast (transform.position, otherPlayer.transform.position, 1) == false)
 						{
 							IsLookingAtSomeone = true;
-										Debug.DrawLine (transform.position, otherPlayer.transform.position);
+							Debug.DrawLine (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
+							Debug.DrawLine (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
+							Debug.DrawLine (transform.position, otherPlayer.transform.position);
 							break;
 						}
 					}
@@ -128,7 +135,8 @@ public class CheckVisibility : MonoBehaviour
 			}
 			else
 			{
-				Insanity = 0;	
+				Insanity = 0;
+				audiolevel = 0;
 			}
 		}
 		
