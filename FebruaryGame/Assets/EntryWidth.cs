@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EntryWidth : MonoBehaviour
 {
-	public float W
+	public float ScaleSize = 1f;
 	
 	
 	// Use this for initialization
@@ -15,6 +15,7 @@ public class EntryWidth : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		TextMesh textMesh = (TextMesh)GetComponent ("TextMesh");
+		
 	}
 }
