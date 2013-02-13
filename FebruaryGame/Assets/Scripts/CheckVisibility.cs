@@ -7,7 +7,7 @@ public class CheckVisibility : MonoBehaviour
 	public AudioSource InsaneNoise;
 	public float CameraShake = 0.2f;
 	public float Insanity = 0;
-	public float InsanityRate = 80;
+	public float InsanityRate = 20;
 	public bool IsLookingAtSomeone = false;
 	public Color SafeColour;
 	public Color AlarmColour;
@@ -16,6 +16,11 @@ public class CheckVisibility : MonoBehaviour
 	public float InsanityProgress
 	{
 		get { return Insanity / 100; }
+	}
+	
+	public bool Dead
+	{
+		get { return Insanity >= 100; }
 	}
 	
 	public static bool IsTransformLit(Transform transform)
@@ -117,12 +122,7 @@ public class CheckVisibility : MonoBehaviour
 	{		
 		// If the player is looking at someone, increase their insanity, else decrease the insanity until it reaches zero.
 		if (IsLookingAtSomeone)
-		{
-			if (Insanity == 0)
-			{
-				//SCREAM	
-			}
-			
+		{			
 			Insanity += Time.deltaTime * InsanityRate;
 			audiolevel += Mathf.CeilToInt(Time.deltaTime);
 		}

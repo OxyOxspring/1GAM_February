@@ -1,16 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\EntryWidth.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CheckVisibility.cs">
     <Files>
-      <File FileName="Assets\EntryWidth.cs" Line="19" Column="3" />
-      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SpiritScript.cs" Line="17" Column="49" />
+      <File FileName="Assets\EntryWidth.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="10" Column="32" />
       <File FileName="Assets\Scripts\Lightning.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Peeping.cs" Line="1" Column="1" />
       <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HeadBobbing.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CritterAI.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CritterAI.cs" Line="40" Column="20" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="339" Column="4" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="111" Column="50" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" Line="7" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

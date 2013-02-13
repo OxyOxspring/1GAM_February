@@ -23,8 +23,6 @@ public class CritterAI : MonoBehaviour {
 	//Movement related Variables
 	static float moveSpeed;
 	
-	//The current player targetted by the Goblin:
-	static GameObject targetPlayer;
 	
 	//Variable for wandering:
 	Vector3 wayPoint;
@@ -40,7 +38,6 @@ public class CritterAI : MonoBehaviour {
 		Wander();
 		moveSpeed = 8f;
 		currentState = 0;
-		targetPlayer = GameObject.Find("Player(Clone)");
 		controller = GetComponent<CharacterController>();
 		nextDelayCount = 40;
 	}
@@ -57,8 +54,7 @@ public class CritterAI : MonoBehaviour {
 	// Update is called once per frame:
 	void Update () 
 	{
-		//Calculate how the far the targetted player is from the Goblin:
-		playerRange = Vector3.Distance(transform.position, targetPlayer.transform.position);
+
 		
 		/////////////////////////////////////
 		//                                 //
@@ -91,61 +87,9 @@ public class CritterAI : MonoBehaviour {
       			 delta.Normalize();
 				 controller.SimpleMove(delta * moveSpeed);
   		   		
-				targetPlayer = GameObject.Find("Player(Clone)");
-				if(playerRange < 6.0f) //I CAN HEAR THE PLAYER!
-				{
-			
-				//I'M ALARMED BY HIS NOISES!
-				currentState = 1;
-				}
-				if(playerRange > 7.0f) //I CANNOT HEAR THE PLAYER!
-				{
-				//I'M NOT ALARMED BY ANY NOISES!
-				currentState = 0;
-				}
+
 		}
 		
 
-		/////////////////////////////////////
-		//                                 //
-		//           ALARMED MODE          //
-		//                                 //
-		/////////////////////////////////////
-		
-		if(currentState == 1)
-		{
-			//IF THE PLAYER IS SEEN BY THE GOBLIN (Using a Linecast...)
-			//This could be improved by adding an angle of view, but I've not added that in yet:
-			RaycastHit playerSensor;
-			if(Physics.Linecast (transform.position,targetPlayer.transform.position,out playerSensor))
-			{
-				if (playerSensor.collider.gameObject.name == "Player(Clone)")
-				{
-					//SQUEAK
-					moveSpeed = 9;
-					moveDelay++;
-					if (moveDelay >= nextDelayCount)
-					{
-						Wander();
-						moveDelay = 0;
-					}
-					
-				}
-			
-			}
-			
-							Quaternion targetRotation = Quaternion.LookRotation(wayPoint - transform.position);
-		        targetRotation = new Quaternion(0,-targetRotation.y,0,targetRotation.w);
-		      	transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
-			
-			  	var delta = wayPoint - transform.position;
-      			 delta.Normalize();
-				 controller.SimpleMove(delta * moveSpeed);
-		}
-		
-
-		
 	}
-
-	
 }

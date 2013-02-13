@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\HeadBobbing.cs" />
      <Compile Include="Assets\Scripts\Lightning.cs" />
      <Compile Include="Assets\Scripts\Peeping.cs" />
+     <Compile Include="Assets\Scripts\SpiritScript.cs" />
      <Compile Include="Assets\Scripts\WindRotation.cs" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
   </ItemGroup>

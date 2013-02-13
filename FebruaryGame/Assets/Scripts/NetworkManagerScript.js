@@ -1,11 +1,18 @@
 var playerPrefab:GameObject;
 var RatPrefab:GameObject;
-var spawn1:GameObject;
-var spawn2:GameObject;
-var spawn3:GameObject;
-var spawn4:GameObject;
-var spawn5:GameObject;
+var SpiritPrefab:GameObject;
+var plrspawn1:GameObject;
+var plrspawn2:GameObject;
+var plrspawn3:GameObject;
+var plrspawn4:GameObject;
+var plrspawn5:GameObject;
+var sprspawn1:GameObject;
+var sprspawn2:GameObject;
+var sprspawn3:GameObject;
+var sprspawn4:GameObject;
+var sprspawn5:GameObject;
 private var spawnObject:GameObject;
+private var spiritspawnObject:GameObject;
 var gameName:String = "OxyOxspringFebNetworking";
 private var stringToEdit : String = "Input Username";
 private var displayString : String = "";
@@ -44,6 +51,8 @@ function Update(){
 		hostData = MasterServer.PollHostList(); 
 		}
 	}
+	
+	killPlayers();
 }
 
 function spawnPlayer(){
@@ -60,25 +69,49 @@ chooseSpawn();
 }
 
 function chooseSpawn(){
-var randomnumber = Random.Range(1,5);
-switch (randomnumber) {
-case 1:
-spawnObject = spawn1;
-break;
-case 2:
-spawnObject = spawn2;
-break;
-case 3:
-spawnObject = spawn3;
-break;
-case 4:
-spawnObject = spawn4;
-break;
-case 5:
-spawnObject = spawn5;
-break;
+	var randomnumber = Random.Range(1,5);
+	switch (randomnumber) {
+	case 1:
+	spawnObject = plrspawn1;
+	spiritspawnObject = plrspawn1;
+	break;
+	case 2:
+	spawnObject = plrspawn2;
+	spiritspawnObject = plrspawn2;
+	break;
+	case 3:
+	spawnObject = plrspawn3;
+	spiritspawnObject = plrspawn3;
+	break;
+	case 4:
+	spawnObject = plrspawn4;
+	spiritspawnObject = plrspawn4;
+	break;
+	case 5:
+	spawnObject = plrspawn5;
+	spiritspawnObject = plrspawn5;
+	break;
+	}
+
 }
 
+function killPlayers(){
+	var players:GameObject[] = GameObject.FindGameObjectsWithTag("Player");
+	
+	for (var i:int = 0; i < players.Length; i++)
+	{
+		if (players[i].GetComponent("CheckVisibility").Dead)
+		{
+			swapPlayerForSpirit(players[i]);
+		}
+	}
+
+}
+
+function swapPlayerForSpirit (player:GameObject){
+	chooseSpawn();
+	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
+	Network.Destroy(player);
 }
 
 //Messages
