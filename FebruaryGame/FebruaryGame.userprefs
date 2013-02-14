@@ -1,20 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\FaceSpirit.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SummoningJoinText.cs">
     <Files>
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="132" Column="29" />
+      <File FileName="Assets\Scripts\SummoningJoinText.cs" Line="47" Column="8" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\SpiritScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CheckVisibility.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="1" Column="1" />
-      <File FileName="Assets\EntryWidth.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Lightning.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Peeping.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HeadBobbing.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CritterAI.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GenericFloatyScript.cs" Line="5" Column="2" />
-      <File FileName="Assets\FaceSpirit.cs" Line="32" Column="46" />
+      <File FileName="Assets\Scripts\GenericFloatyScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="46" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

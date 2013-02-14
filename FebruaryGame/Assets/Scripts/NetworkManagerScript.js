@@ -1,4 +1,4 @@
-var playerPrefab:GameObject;
+var PlayerPrefab:GameObject;
 var RatPrefab:GameObject;
 var SpiritPrefab:GameObject;
 var plrspawn1:GameObject;
@@ -58,10 +58,10 @@ function Update(){
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
-	playerPrefab.transform.Find("Camera").camera.enabled = false;
-	playerPrefab.transform.Find("Camera").GetComponent(AudioListener).enabled = false;
-	playerPrefab.light.enabled = false;
-	Network.Instantiate(playerPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	PlayerPrefab.transform.Find("Camera").camera.enabled = false;
+	PlayerPrefab.transform.Find("Camera").GetComponent(AudioListener).enabled = false;
+	PlayerPrefab.light.enabled = false;
+	Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
 	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
@@ -114,6 +114,16 @@ function swapPlayerForSpirit (player:GameObject){
 		chooseSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
+	}
+}
+
+function swapSpiritForPlayer(spirit:GameObject)
+{
+	if (spirit.networkView.isMine)
+	{
+		chooseSpawn();
+		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
+		Network.Destroy(spirit);
 	}
 }
 

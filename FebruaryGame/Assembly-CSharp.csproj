@@ -44,15 +44,15 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EntryWidth.cs" />
-     <Compile Include="Assets\FaceSpirit.cs" />
      <Compile Include="Assets\Scripts\CheckVisibility.cs" />
      <Compile Include="Assets\Scripts\CritterAI.cs" />
+     <Compile Include="Assets\Scripts\EntryWidth.cs" />
      <Compile Include="Assets\Scripts\GenericFloatyScript.cs" />
      <Compile Include="Assets\Scripts\HeadBobbing.cs" />
      <Compile Include="Assets\Scripts\Lightning.cs" />
      <Compile Include="Assets\Scripts\Peeping.cs" />
      <Compile Include="Assets\Scripts\SpiritScript.cs" />
+     <Compile Include="Assets\Scripts\SummoningJoinText.cs" />
      <Compile Include="Assets\Scripts\WindRotation.cs" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
   </ItemGroup>
