@@ -58,14 +58,7 @@ function Update(){
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpawn();
-	PlayerPrefab.transform.Find("Camera").camera.enabled = false;
-	PlayerPrefab.transform.Find("Camera").GetComponent(AudioListener).enabled = false;
-	PlayerPrefab.light.enabled = false;
-	Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
-	Network.Instantiate(RatPrefab, spawnObject.transform.position, Quaternion.identity,0);
+	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
 }
 
 function chooseSpawn(){
@@ -73,23 +66,23 @@ function chooseSpawn(){
 	switch (randomnumber) {
 	case 1:
 	spawnObject = plrspawn1;
-	spiritspawnObject = plrspawn1;
+	spiritspawnObject = sprspawn1;
 	break;
 	case 2:
 	spawnObject = plrspawn2;
-	spiritspawnObject = plrspawn2;
+	spiritspawnObject = sprspawn2;
 	break;
 	case 3:
 	spawnObject = plrspawn3;
-	spiritspawnObject = plrspawn3;
+	spiritspawnObject = sprspawn3;
 	break;
 	case 4:
 	spawnObject = plrspawn4;
-	spiritspawnObject = plrspawn4;
+	spiritspawnObject = sprspawn4;
 	break;
 	case 5:
 	spawnObject = plrspawn5;
-	spiritspawnObject = plrspawn5;
+	spiritspawnObject = sprspawn5;
 	break;
 	}
 
