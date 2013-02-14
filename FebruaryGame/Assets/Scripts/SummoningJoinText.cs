@@ -19,6 +19,7 @@ public class SummoningJoinText : MonoBehaviour
 			if (carrot >= 5)
 			{
 				networkManager.SendMessage ("swapSpiritForPlayer", spirit);
+				networkManager.SendMessage ("beginTimer");
 				break;	
 			}
 			
