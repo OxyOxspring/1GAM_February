@@ -100,7 +100,7 @@ function killPlayers(){
 	
 	for (var i:int = 0; i < players.Length; i++)
 	{
-		if (players[i].GetComponent("CheckVisibility").Dead)
+		if (players[i].transform.GetComponent("CheckVisibility").Dead)
 		{
 			swapPlayerForSpirit(players[i]);
 		}
@@ -109,9 +109,12 @@ function killPlayers(){
 }
 
 function swapPlayerForSpirit (player:GameObject){
-	chooseSpawn();
-	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
-	Network.Destroy(player);
+	if (player.networkView.isMine)
+	{
+		chooseSpawn();
+		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
+		Network.Destroy(player);
+	}
 }
 
 //Messages

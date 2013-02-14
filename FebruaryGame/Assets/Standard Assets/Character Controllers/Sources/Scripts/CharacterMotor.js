@@ -193,7 +193,7 @@ function Awake () {
 	controller = GetComponent (CharacterController);
 	tr = transform;
 	
-	if (networkView.isMine)
+	if (networkView.isMine && name == "Player(Clone)")
 	{
 		transform.Find("Camera").camera.enabled = true;
 		transform.Find("Camera").GetComponent(AudioListener).enabled = true;
