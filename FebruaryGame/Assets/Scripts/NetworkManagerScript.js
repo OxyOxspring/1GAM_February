@@ -1,6 +1,10 @@
 var PlayerPrefab:GameObject;
 var RatPrefab:GameObject;
 var SpiritPrefab:GameObject;
+var LeaderBoard:GameObject;
+var GameTimer:float;
+var GameTimerRunning:boolean;
+
 var plrspawn1:GameObject;
 var plrspawn2:GameObject;
 var plrspawn3:GameObject;
@@ -11,6 +15,9 @@ var sprspawn2:GameObject;
 var sprspawn3:GameObject;
 var sprspawn4:GameObject;
 var sprspawn5:GameObject;
+
+var SpiritRealm:GameObject;
+
 private var spawnObject:GameObject;
 private var spiritspawnObject:GameObject;
 var gameName:String = "OxyOxspringFebNetworking";
@@ -34,7 +41,7 @@ function Start(){
 }
 
 function startServer(){
-Network.InitializeServer(32,25001,!Network.MovePublicAddress);
+Network.InitializeServer(10,25001,!Network.MovePublicAddress);
 MasterServer.RegisterHost(gameName,"Hideous", "Become Hideous...");
 }
 
@@ -50,6 +57,11 @@ function Update(){
 		Debug.Log(MasterServer.PollHostList().Length);
 		hostData = MasterServer.PollHostList(); 
 		}
+	}
+	
+	if (GameTimerRunning == true)
+	{
+		GameTimer += Time.deltaTime;
 	}
 	
 	killPlayers();
@@ -104,9 +116,13 @@ function killPlayers(){
 function swapPlayerForSpirit (player:GameObject){
 	if (player.networkView.isMine)
 	{
+		 
+		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit, GameTimer);
+		
 		chooseSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
+		SpiritRealm.active = true;
 	}
 }
 
@@ -117,7 +133,18 @@ function swapSpiritForPlayer(spirit:GameObject)
 		chooseSpawn();
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(spirit);
+		SpiritRealm.active = false;
 	}
+}
+
+function beginTimer()
+{
+	// If network view is server owner
+	//{
+		GameTimer = 0;
+		GameTimerRunning = true;
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("ClearEntries");
+	//}
 }
 
 //Messages
@@ -175,7 +202,7 @@ function OnGUI(){
 	}
 	else
 	{
-	GUI.Label(Rect(btnX-30,btnY-40,btnW*4,btnH/5),displayString);
+		GUI.Label(Rect(btnX-30,btnY-40,btnW*4,btnH/5),displayString);
 	}
 }
 
@@ -185,5 +212,48 @@ function OnGUI(){
 function updateString(str:String){
 displayString = str + " has joined the game!";
 }
+
+
+@RPC
+function leaderboardRecordEntry(name:String, time:float)
+{
+	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
+	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", time);
+	
+//	if (Network.isServer)
+//	{
+//		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
+//		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", time);
+//	}
+//	else
+//	{
+//	
+//	}
+}
+
+//@RPC
+//function syncLeaderboards()
+//{
+//	var hostNames:String[] = new String[10];
+//	var hostTimes:float[] = new float[10];
+//	
+//	if (Network.isServer)
+//	{
+//		for (var i:int = 0; i < 10; i++)
+//		{
+//			LeaderBoard.GetComponent("Leaderboard").SendMessage("GetName", i);
+//			LeaderBoard.GetComponent("Leaderboard").SendMessage("GetTime", i);
+//		}
+//	}
+//	
+//	if (Network.isClient)
+//	{
+//		for (i = 0; i < 10; i++)
+//		{
+//			LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", hostNames[i]);
+//			LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", hostTimes[i]);
+//		}
+//	}
+//}
 
 
