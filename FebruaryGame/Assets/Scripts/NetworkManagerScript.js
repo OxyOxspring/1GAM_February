@@ -122,7 +122,18 @@ function swapPlayerForSpirit (player:GameObject){
 		chooseSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
-		SpiritRealm.active = true;
+		
+		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
+		{			
+			if (child.name == "SmokeRing")
+			{
+				child.particleSystem.Play();
+			}
+			else
+			{
+				child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer).enabled = true;
+			}
+		}
 	}
 }
 
@@ -133,7 +144,20 @@ function swapSpiritForPlayer(spirit:GameObject)
 		chooseSpawn();
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(spirit);
-		SpiritRealm.active = false;
+		
+		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
+		{
+
+			if (child.name == "SmokeRing")
+			{
+				child.particleSystem.Stop();
+				child.particleSystem.Clear();
+			}
+			else
+			{
+				child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer).enabled = false;
+			}
+		}
 	}
 }
 
@@ -213,7 +237,6 @@ function updateString(str:String){
 displayString = str + " has joined the game!";
 }
 
-
 @RPC
 function leaderboardRecordEntry(name:String, time:float)
 {
@@ -229,6 +252,15 @@ function leaderboardRecordEntry(name:String, time:float)
 //	{
 //	
 //	}
+}
+
+@RPC
+function forceAllSpawn()
+{
+	for (var spirit:GameObject in GameObject.FindGameObjectsWithTag("Spirit"))
+	{
+		swapSpiritForPlayer(spirit);
+	}
 }
 
 //@RPC

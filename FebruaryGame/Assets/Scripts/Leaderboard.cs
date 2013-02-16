@@ -24,7 +24,7 @@ public class Leaderboard : MonoBehaviour
 			i = System.Convert.ToInt32 (entry.name[entry.name.Length - 1].ToString ());
 			if (i < spirits.Length)
 			{
-				entry.gameObject.SetActive(true);
+				//entry.renderer.enabled = true;
 				TextMesh name = (TextMesh)entry.GetChild (0).GetComponent ("TextMesh");
 				TextMesh time = (TextMesh)entry.GetChild (1).GetComponent ("TextMesh");
 				name.text = names[i];
@@ -32,7 +32,7 @@ public class Leaderboard : MonoBehaviour
 			}
 			else
 			{
-				entry.gameObject.SetActive(false);
+				//entry.renderer.enabled = false;
 			}
 		}
 	}

@@ -4,25 +4,22 @@ using System.Collections;
 public class SummoningJoinText : MonoBehaviour
 {
 	public GameObject networkManager;
-	private int potato = 0;	// Number of players inside the circle.
-	private float carrot = 0;	// Time until the game starts.
+	private int potatoes = 0;	// Number of players inside the circle.
+	private float thyme = 0;	// Time until the game starts.
+	private float mashed = 0;	// Total number of players and spirits.
+	private bool baking = false;
 	
 	void Update ()
 	{
 		GameObject[] spirits = GameObject.FindGameObjectsWithTag("Spirit");
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		TextMesh textMesh = (TextMesh)GetComponent ("TextMesh");
 		
-		potato = 0;
+		mashed = spirits.Length + players.Length;
+		potatoes = 0;
 		
 		foreach (GameObject spirit in spirits)
-		{
-			if (carrot >= 5)
-			{
-				networkManager.SendMessage ("swapSpiritForPlayer", spirit);
-				networkManager.SendMessage ("beginTimer");
-				break;	
-			}
-			
+		{			
 			if (spirit.networkView.isMine)
 			{
 				transform.LookAt (new Vector3(spirit.transform.position.x, spirit.transform.position.y, spirit.transform.position.z));
@@ -31,26 +28,35 @@ public class SummoningJoinText : MonoBehaviour
 			
 			if (Vector3.Distance (transform.position, spirit.transform.position) < 9f)
 			{
-				potato++;	
+				potatoes++;	
 			}
 		}
 		
-		if (spirits.Length > 0 && potato == spirits.Length)
+		if (Network.isServer)
 		{
-			carrot += Time.deltaTime;
-		}
-		else
-		{
-			if (carrot > 0)	
+			if (potatoes == mashed)
 			{
-				carrot -= Time.deltaTime;
+				thyme += Time.deltaTime;
+				
+				// Check the timer.
+				if (thyme >= 5)
+				{
+					networkManager.networkView.RPC ("forceAllSpawn", RPCMode.All);
+				}
 			}
 			else
 			{
-				carrot = 0;	
-			}
+				if (thyme > 0)	
+				{
+					thyme -= Time.deltaTime;
+				}
+				else
+				{
+					thyme = 0;	
+				}
+			}			
 		}
 		
-		textMesh.text = potato.ToString () + "/" + spirits.Length.ToString () ;
+		textMesh.text = potatoes.ToString () + "/" + mashed.ToString () ;
 	}
 }
