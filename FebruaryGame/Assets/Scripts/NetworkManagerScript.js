@@ -10,6 +10,12 @@ var plrspawn2:GameObject;
 var plrspawn3:GameObject;
 var plrspawn4:GameObject;
 var plrspawn5:GameObject;
+var plrspawn6:GameObject;
+var plrspawn7:GameObject;
+var plrspawn8:GameObject;
+var plrspawn9:GameObject;
+var plrspawn10:GameObject;
+
 var sprspawn1:GameObject;
 var sprspawn2:GameObject;
 var sprspawn3:GameObject;
@@ -69,31 +75,45 @@ function Update(){
 
 function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
-chooseSpawn();
+chooseSpiritSpawn();
 	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
 }
 
-function chooseSpawn(){
+function choosePlayerSpawn(){
+	var foundSpawn = false;
+	for (var spawn:GameObject in GameObject.FindGameObjectsWithTag("PlayerSpawn"))
+	{
+		for (var player:GameObject in GameObject.FindGameObjectsWithTag("Player"))
+		{
+			if(Vector3.Distance(spawn.transform.position,player.transform.position) > 4.0f)
+			{
+			spawnObject = spawn;
+			foundSpawn = true;
+			}
+		}
+	}
+	if(foundSpawn == false)
+	{
+	spawnObject = plrspawn1;
+	}
+}
+
+function chooseSpiritSpawn(){
 	var randomnumber = Random.Range(1,5);
 	switch (randomnumber) {
 	case 1:
-	spawnObject = plrspawn1;
 	spiritspawnObject = sprspawn1;
 	break;
 	case 2:
-	spawnObject = plrspawn2;
 	spiritspawnObject = sprspawn2;
 	break;
 	case 3:
-	spawnObject = plrspawn3;
 	spiritspawnObject = sprspawn3;
 	break;
 	case 4:
-	spawnObject = plrspawn4;
 	spiritspawnObject = sprspawn4;
 	break;
 	case 5:
-	spawnObject = plrspawn5;
 	spiritspawnObject = sprspawn5;
 	break;
 	}
@@ -116,10 +136,8 @@ function killPlayers(){
 function swapPlayerForSpirit (player:GameObject){
 	if (player.networkView.isMine)
 	{
-		 
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit, GameTimer);
-		
-		chooseSpawn();
+		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
 		
@@ -139,15 +157,14 @@ function swapPlayerForSpirit (player:GameObject){
 
 function swapSpiritForPlayer(spirit:GameObject)
 {
-	if (spirit.networkView.isMine)
-	{
-		chooseSpawn();
+		if (spirit.networkView.isMine)
+		{	
+		choosePlayerSpawn();
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(spirit);
 		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{
-
 			if (child.name == "SmokeRing")
 			{
 				child.particleSystem.Stop();
