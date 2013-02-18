@@ -1,6 +1,7 @@
 var PlayerPrefab:GameObject;
 var RatPrefab:GameObject;
 var SpiritPrefab:GameObject;
+var SpiritPrefabUntagged:GameObject;
 var LeaderBoard:GameObject;
 var GameTimer:float;
 var GameTimerRunning:boolean;
@@ -70,7 +71,6 @@ function Update(){
 		if (GameTimerRunning == true)
 		{
 			GameTimer += Time.deltaTime;
-			Debug.Log(GameTimer);
 		}
 	}
 	
@@ -139,13 +139,10 @@ function killPlayers(){
 
 function swapPlayerForSpirit (player:GameObject){
 
-	if (Network.isServer)
-	{
-		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit, GameTimer);
-	}
-	
 	if (player.networkView.isMine)
 	{
+		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit);
+		
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
@@ -166,6 +163,14 @@ function swapPlayerForSpirit (player:GameObject){
 				}
 			}
 		}
+		
+		// Tether an untagged spirit to every existing player.
+		for (var alive:GameObject in GameObject.FindGameObjectsWithTag("Player"))
+		{
+			//SpiritPrefabUntagged.BroadcastMessage("Tether", alive); TETHER
+			var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
+		}
+		
 	}
 }
 
@@ -275,10 +280,19 @@ displayString = str + " has joined the game!";
 }
 
 @RPC
-function leaderboardRecordEntry(name:String, time:float)
+function leaderboardRecordEntry(name:String)
 {
-	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
-	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", time);
+	if (Network.isServer)
+	{
+		// Send the name passed through.
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
+		
+		// Send the timer the server runs.
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", GameTimer);
+		
+		// Increment the index.
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("NextIndex");
+	}
 }
 
 @RPC
@@ -297,12 +311,19 @@ function forceAllSpawn()
 
 @RPC
 function syncLeaderboardEntry(name:String, time:float, index:int)
-{
-	if (!Network.isServer)
-	{
-		LeaderBoard.SendMessage("SetIndexToRecordAt", index);
-		LeaderBoard.SendMessage("RecordNameAtIndex", name);
-		LeaderBoard.SendMessage("RecordTimeAtIndex", time);
+{	
+	Debug.Log("Syncing...");
+
+	if (Network.isClient)
+	{		
+		// Set the index.
+		LeaderBoard.SendMessage("SetIndex", index);
+	
+		// Record a name.
+		LeaderBoard.SendMessage("RecordName", name);
+		
+		// Record a time (and push to the next index).
+		LeaderBoard.SendMessage("RecordTime", time);
 	}
 }
 

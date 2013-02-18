@@ -14,7 +14,11 @@ public class SpiritScript : MonoBehaviour
 		if (networkView.isMine)
 		{
 			audio.Stop();
-			transform.Find ("Camera").camera.enabled = true;
+			Transform cam = transform.Find ("Camera");
+			if (cam != null)
+			{
+				cam.camera.enabled = true;
+			}
 		}
 	}
 	
