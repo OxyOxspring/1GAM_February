@@ -7,7 +7,7 @@ public class SummoningJoinText : MonoBehaviour
 	private int potatoes = 0;	// Number of players inside the circle.
 	private float thyme = 0;	// Time until the game starts.
 	private float mashed = 0;	// Total number of players and spirits.
-	private bool baking = false;
+
 	
 	void Update ()
 	{

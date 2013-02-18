@@ -65,9 +65,13 @@ function Update(){
 		}
 	}
 	
-	if (GameTimerRunning == true)
+	if (Network.isServer)
 	{
-		GameTimer += Time.deltaTime;
+		if (GameTimerRunning == true)
+		{
+			GameTimer += Time.deltaTime;
+			Debug.Log(GameTimer);
+		}
 	}
 	
 	killPlayers();
@@ -134,9 +138,14 @@ function killPlayers(){
 }
 
 function swapPlayerForSpirit (player:GameObject){
-	if (player.networkView.isMine)
+
+	if (Network.isServer)
 	{
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit, GameTimer);
+	}
+	
+	if (player.networkView.isMine)
+	{
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
@@ -149,7 +158,12 @@ function swapPlayerForSpirit (player:GameObject){
 			}
 			else
 			{
-				child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer).enabled = true;
+				var fudge:MeshRenderer = child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer);
+				
+				if (fudge != null)
+				{
+					fudge.enabled = true;
+				}
 			}
 		}
 	}
@@ -172,20 +186,26 @@ function swapSpiritForPlayer(spirit:GameObject)
 			}
 			else
 			{
-				child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer).enabled = false;
+				var fudge:MeshRenderer = child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer);
+				
+				if (fudge != null)
+				{
+					fudge.enabled = false;
+				}
 			}
 		}
 	}
 }
 
+
 function beginTimer()
 {
-	// If network view is server owner
-	//{
+	 if (Network.isServer)
+	{
 		GameTimer = 0;
 		GameTimerRunning = true;
 		LeaderBoard.GetComponent("Leaderboard").SendMessage("ClearEntries");
-	//}
+	}
 }
 
 //Messages
@@ -259,50 +279,33 @@ function leaderboardRecordEntry(name:String, time:float)
 {
 	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
 	LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", time);
-	
-//	if (Network.isServer)
-//	{
-//		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", name);
-//		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", time);
-//	}
-//	else
-//	{
-//	
-//	}
 }
 
 @RPC
 function forceAllSpawn()
 {
+	if (Network.isServer)
+	{
+		beginTimer();
+	}
+	
 	for (var spirit:GameObject in GameObject.FindGameObjectsWithTag("Spirit"))
 	{
 		swapSpiritForPlayer(spirit);
 	}
 }
 
-//@RPC
-//function syncLeaderboards()
-//{
-//	var hostNames:String[] = new String[10];
-//	var hostTimes:float[] = new float[10];
-//	
-//	if (Network.isServer)
-//	{
-//		for (var i:int = 0; i < 10; i++)
-//		{
-//			LeaderBoard.GetComponent("Leaderboard").SendMessage("GetName", i);
-//			LeaderBoard.GetComponent("Leaderboard").SendMessage("GetTime", i);
-//		}
-//	}
-//	
-//	if (Network.isClient)
-//	{
-//		for (i = 0; i < 10; i++)
-//		{
-//			LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordName", hostNames[i]);
-//			LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordTime", hostTimes[i]);
-//		}
-//	}
-//}
+@RPC
+function syncLeaderboardEntry(name:String, time:float, index:int)
+{
+	if (!Network.isServer)
+	{
+		LeaderBoard.SendMessage("SetIndexToRecordAt", index);
+		LeaderBoard.SendMessage("RecordNameAtIndex", name);
+		LeaderBoard.SendMessage("RecordTimeAtIndex", time);
+	}
+}
+
+
 
 

@@ -28,7 +28,7 @@ public class Leaderboard : MonoBehaviour
 				TextMesh name = (TextMesh)entry.GetChild (0).GetComponent ("TextMesh");
 				TextMesh time = (TextMesh)entry.GetChild (1).GetComponent ("TextMesh");
 				name.text = names[i];
-				time.text = times[i].ToString ();
+				time.text = "| " + times[i].ToString ();
 			}
 			else
 			{
