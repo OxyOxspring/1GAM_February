@@ -1,18 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetworkManagerScript.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SpiritScript.cs">
     <Files>
+      <File FileName="Assets\Scripts\SpiritScript.cs" Line="64" Column="110" />
       <File FileName="Assets\Scripts\SummoningJoinText.cs" Line="6" Column="34" />
-      <File FileName="Assets\Scripts\SpiritScript.cs" Line="17" Column="13" />
       <File FileName="Assets\Scripts\CheckVisibility.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Lightning.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Peeping.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\HeadBobbing.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CritterAI.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GenericFloatyScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="170" Column="68" />
-      <File FileName="Assets\Scripts\Leaderboard.cs" Line="87" Column="2" />
-      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="196" Column="59" />
+      <File FileName="Assets\Scripts\Leaderboard.cs" Line="116" Column="3" />
+      <File FileName="Assets\Scripts\PlayerScript.cs" Line="21" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

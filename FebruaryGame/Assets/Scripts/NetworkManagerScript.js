@@ -167,17 +167,19 @@ function swapPlayerForSpirit (player:GameObject){
 		// Tether an untagged spirit to every existing player.
 		for (var alive:GameObject in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			//SpiritPrefabUntagged.BroadcastMessage("Tether", alive); TETHER
-			var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
+			if (alive != player)	// Only the player owning the network connection will have a camera enabled.
+			{
+				var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
+				instance.GetComponent("SpiritScript").SendMessage("Tether", alive);
+			}
 		}
-		
 	}
 }
 
 function swapSpiritForPlayer(spirit:GameObject)
 {
-		if (spirit.networkView.isMine)
-		{	
+	if (spirit.networkView.isMine)
+	{	
 		choosePlayerSpawn();
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(spirit);
@@ -201,7 +203,6 @@ function swapSpiritForPlayer(spirit:GameObject)
 		}
 	}
 }
-
 
 function beginTimer()
 {
@@ -326,6 +327,8 @@ function syncLeaderboardEntry(name:String, time:float, index:int)
 		LeaderBoard.SendMessage("RecordTime", time);
 	}
 }
+
+
 
 
 

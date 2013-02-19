@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Leaderboard.cs" />
      <Compile Include="Assets\Scripts\Lightning.cs" />
      <Compile Include="Assets\Scripts\Peeping.cs" />
+     <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SpiritScript.cs" />
      <Compile Include="Assets\Scripts\SummoningJoinText.cs" />
      <Compile Include="Assets\Scripts\WindRotation.cs" />
