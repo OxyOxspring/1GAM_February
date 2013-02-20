@@ -34,7 +34,7 @@ public class SummoningJoinText : MonoBehaviour
 		
 		if (Network.isServer)
 		{
-			if (potatoes == mashed)
+			if (potatoes == mashed && potatoes > 1)
 			{
 				thyme += Time.deltaTime;
 				
@@ -57,6 +57,13 @@ public class SummoningJoinText : MonoBehaviour
 			}			
 		}
 		
-		textMesh.text = potatoes.ToString () + "/" + mashed.ToString () ;
+		if (mashed == 1)
+		{
+			textMesh.text = "Waiting for souls...";
+		}
+		else
+		{
+			textMesh.text = potatoes.ToString () + "/" + mashed.ToString ();
+		}
 	}
 }

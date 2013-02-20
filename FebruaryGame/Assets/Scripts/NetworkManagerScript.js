@@ -83,43 +83,64 @@ chooseSpiritSpawn();
 	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
 }
 
-function choosePlayerSpawn(){
-	var foundSpawn = false;
-	for (var spawn:GameObject in GameObject.FindGameObjectsWithTag("PlayerSpawn"))
+function choosePlayerSpawn()
+{
+	var randomnumber = Random.Range(1,10);
+	switch (randomnumber)
 	{
-		for (var player:GameObject in GameObject.FindGameObjectsWithTag("Player"))
-		{
-			if(Vector3.Distance(spawn.transform.position,player.transform.position) > 4.0f)
-			{
-			spawnObject = spawn;
-			foundSpawn = true;
-			}
-		}
-	}
-	if(foundSpawn == false)
-	{
-	spawnObject = plrspawn1;
+		case 1:
+		spawnObject = plrspawn1;
+		break;
+		case 2:
+		spawnObject = plrspawn2;
+		break;
+		case 3:
+		spawnObject = plrspawn3;
+		break;
+		case 4:
+		spawnObject = plrspawn4;
+		break;
+		case 5:
+		spawnObject = plrspawn5;
+		break;
+		case 6:
+		spawnObject = plrspawn1;
+		break;
+		case 7:
+		spawnObject = plrspawn2;
+		break;
+		case 8:
+		spawnObject = plrspawn3;
+		break;
+		case 9:
+		spawnObject = plrspawn4;
+		break;
+		case 10:
+		spawnObject = plrspawn5;
+		break;
 	}
 }
 
-function chooseSpiritSpawn(){
+function chooseSpiritSpawn()
+{
 	var randomnumber = Random.Range(1,5);
-	switch (randomnumber) {
-	case 1:
-	spiritspawnObject = sprspawn1;
-	break;
-	case 2:
-	spiritspawnObject = sprspawn2;
-	break;
-	case 3:
-	spiritspawnObject = sprspawn3;
-	break;
-	case 4:
-	spiritspawnObject = sprspawn4;
-	break;
-	case 5:
-	spiritspawnObject = sprspawn5;
-	break;
+	switch (randomnumber)
+	{
+		case 1:
+		spiritspawnObject = sprspawn1;
+		break;
+		case 2:
+		spiritspawnObject = sprspawn2;
+		break;
+		case 3:
+		spiritspawnObject = sprspawn3;
+		break;
+		case 4:
+		spiritspawnObject = sprspawn4;
+		break;
+		case 5:
+		spiritspawnObject = sprspawn5;
+		break;
 	}
 
 }
@@ -308,6 +329,8 @@ function forceAllSpawn()
 	{
 		swapSpiritForPlayer(spirit);
 	}
+	
+	//unspawnallspawns();
 }
 
 @RPC
@@ -327,9 +350,5 @@ function syncLeaderboardEntry(name:String, time:float, index:int)
 		LeaderBoard.SendMessage("RecordTime", time);
 	}
 }
-
-
-
-
 
 

@@ -15,10 +15,17 @@ public class SpiritScript : MonoBehaviour
 		{
 			audio.Stop();
 			
-			// Enable spirits.
-			foreach (GameObject spirit in GameObject.FindGameObjectsWithTag("Spirit"))
+			foreach (GameObject spirit in GameObject.FindGameObjectsWithTag ("Spirit"))
 			{
-				spirit.active = true;
+				// Disable light.
+				spirit.light.enabled = true;
+				
+				// Disable light's light.
+				spirit.GetComponent<Light>().enabled = true;
+				
+				// Disable particle system.
+				spirit.GetComponent<ParticleSystem>().Play();
+				
 			}
 			
 			// Invis-players.
@@ -40,12 +47,12 @@ public class SpiritScript : MonoBehaviour
 	{
 		if (networkView.isMine)
 		{
-		waveTimer += Time.deltaTime;
-		
-		if (waveTimer >= Mathf.PI * 2)
-		{
-			waveTimer = 0;
-		}
+			waveTimer += Time.deltaTime;
+			
+			if (waveTimer >= Mathf.PI * 2)
+			{
+				waveTimer = 0;
+			}
 		
 			// Follows the object its tethered to (so when spectating the spirit can be placed over players.
 			if (TetheredObject == null)
