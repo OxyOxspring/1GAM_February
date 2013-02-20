@@ -28,23 +28,32 @@ public class Leaderboard : MonoBehaviour
 			
 			i = System.Convert.ToInt32 (entry.name[entry.name.Length - 1].ToString ());
 			
-			if (i < spirits.Length)
+			if (names[0] == "")	// If there are no entries.
 			{
-				//entry.renderer.enabled = true;
-				name.text = names[i];
-				
-				int minutes = (int)times[i] / 60;
-				int seconds = (int)times[i] % 60;
-				
-				time.text = "survived for " + minutes.ToString () + ":" + seconds.ToString ();
-			}
-			else
-			{
-				//entry.renderer.enabled = false;
 				name.text = "";
 				time.text = "";
 			}
+			else
+			{
+				if (i < spirits.Length)
+				{
+					//entry.renderer.enabled = true;
+					name.text = names[i];
+					
+					int minutes = (int)times[i] / 60;
+					int seconds = (int)times[i] % 60;
+					
+					time.text = "survived for " + minutes.ToString () + ":" + seconds.ToString ();
+				}
+				else
+				{
+					//entry.renderer.enabled = false;
+					name.text = "";
+					time.text = "";
+				}
+			}
 		}
+		
 		
 		SyncEntries();
 	}

@@ -12,15 +12,22 @@ public class CheckVisibility : MonoBehaviour
 	public Color SafeColour;
 	public Color AlarmColour;
 	public int audiolevel = 0;
+	public float Hunger = 0;
+	public float HungerRate = 0.6f;
 	
 	public float InsanityProgress
 	{
 		get { return Insanity / 100; }
 	}
 	
+	public float HungerProgress
+	{
+		get { return Hunger / 100; }	
+	}
+	
 	public bool Dead
 	{
-		get { return Insanity >= 100; }
+		get { return Insanity >= 100 || Hunger >= 100; }
 	}
 	
 	public static bool IsTransformLit(Transform transform)
@@ -65,6 +72,8 @@ public class CheckVisibility : MonoBehaviour
 			HandleVision ();
 			
 			HandleSanity ();
+			
+			HandleHunger();
 			
 			InsaneNoise.volume = (float)audiolevel / 100;
 			
@@ -144,5 +153,41 @@ public class CheckVisibility : MonoBehaviour
 		
 		// Shake the camera more as the player gets more scared.
 		CameraObject.transform.localPosition = new Vector3 (Random.Range (-CameraShake, CameraShake) * InsanityProgress, Random.Range (-CameraShake, CameraShake) * InsanityProgress, 0);
+	}
+	
+	void HandleHunger()
+	{	
+		GlowEffect glow = transform.Find ("Camera").GetComponent<GlowEffect>();
+		
+		glow.glowIntensity = (HungerProgress - 0.25f) * 5;
+		
+		if (Hunger < 100)	
+		{
+			Hunger += Time.deltaTime * HungerRate;
+		}
+		Debug.Log (Hunger);
+		
+		if (Hunger < 25)
+		{
+			glow.enabled = false;
+		}
+		else
+		{
+			glow.enabled = true;
+		}
+			
+		
+		if (transform.GetComponent<CharacterMotor>().GetCrouched() == true)
+		{
+			foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
+			{
+				// If the player is over a corpse, eat it.
+				if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
+				{
+					Hunger = 0;
+				}
+			}
+		}
+		
 	}
 }

@@ -20,7 +20,7 @@ public class PlayerScript : MonoBehaviour
 	void Update ()
 	{
 		if (networkView.isMine)
-		{
+		{			
 			if (badspawntimer < 5)
 			{
 				badspawntimer += Time.deltaTime;
@@ -34,13 +34,10 @@ public class PlayerScript : MonoBehaviour
 						if (Vector3.Distance (transform.position, player.transform.position) < 5)	
 						{
 							networkManager.SendMessage ("swapSpiritForPlayer", gameObject);
-							Debug.Log ("BAD SPAWN!");
 							return;
 						}
 					}
-				}
-				Debug.Log (badspawntimer);
-			
+				}	
 			} 
 			
 			foreach (GameObject spirit in GameObject.FindGameObjectsWithTag ("Spirit"))
