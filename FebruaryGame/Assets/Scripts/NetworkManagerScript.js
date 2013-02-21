@@ -45,6 +45,8 @@ function Start(){
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
+	
+	Screen.SetResolution(1280, 720, false, 60);
 }
 
 function startServer(){

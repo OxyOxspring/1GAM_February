@@ -12,8 +12,14 @@ public class CheckVisibility : MonoBehaviour
 	public Color SafeColour;
 	public Color AlarmColour;
 	public int audiolevel = 0;
-	public float Hunger = 0;
+	public float Hunger = 50;
 	public float HungerRate = 0.6f;
+	private float heart1 = 0;
+	private float sinheart1 = 0;
+	private float heart2 = 2 * Mathf.PI * 0.3f;
+	private float sinheart2 = 0;
+	private float heart3 = 0;
+	private float sinheart3 = 0;
 	
 	public float InsanityProgress
 	{
@@ -157,24 +163,76 @@ public class CheckVisibility : MonoBehaviour
 	
 	void HandleHunger()
 	{	
-		GlowEffect glow = transform.Find ("Camera").GetComponent<GlowEffect>();
 		
-		glow.glowIntensity = (HungerProgress - 0.25f) * 5;
+		
+		ScreenOverlay[] over = transform.Find ("Camera").GetComponents<ScreenOverlay>();
+		Vignetting vig = transform.Find ("Camera").GetComponent<Vignetting>();
+		Fisheye fish = transform.Find ("Camera").GetComponent<Fisheye>();
+		
+		//Heartbeat Stuff:
+		if (heart1 >= Mathf.PI * 2)
+		{
+			heart1 = 0;
+		}
+		else
+		{
+			heart1 += Time.deltaTime * 3;
+		}
+		
+		float sinheart1 = Mathf.Sin (heart1 + Mathf.PI / 4);
+		
+		if (heart2 >= Mathf.PI * 2)
+		{
+			heart2 = 0;
+		}
+		else
+		{
+			heart2 += Time.deltaTime * 3;
+		}	
+		
+		float sinheart2 = Mathf.Cos (heart2 + Mathf.PI / 4);
+		
+		if (heart3 >= Mathf.PI * 2)
+		{
+			heart3 = 0;
+		}
+		else
+		{
+			heart3 += Time.deltaTime * 1.5f;	
+		}
+		
+		float sinheart3 = Mathf.Cos (heart1 / 2);
+		
+		float heartsin = 0;
+		
+		if (sinheart3 > 0)
+		{
+			heartsin = Mathf.Max(0, Mathf.Max(Mathf.Sin(heart1), Mathf.Sin (heart2)));
+		}
+		
+		if (HungerProgress > 0.25f)
+		{
+			float modhung = HungerProgress - 0.25f;
+			
+			over[0].intensity = modhung * 0.8f + 0.4f * heartsin;
+			over[1].intensity = modhung * 0.8f - 0.4f * heartsin;
+			vig.intensity = 5 + modhung * 6 + 2 * heartsin;
+			fish.strengthX = fish.strengthY = 0.15f + modhung * 0.75f;
+		}
+		else
+		{
+			over[0].intensity = 0;
+			over[1].intensity = 0;
+			vig.intensity = 5 ;
+			fish.strengthX = fish.strengthY = 0.15f;
+		}
+
 		
 		if (Hunger < 100)	
 		{
 			Hunger += Time.deltaTime * HungerRate;
 		}
-		Debug.Log (Hunger);
-		
-		if (Hunger < 25)
-		{
-			glow.enabled = false;
-		}
-		else
-		{
-			glow.enabled = true;
-		}
+		//Debug.Log (Hunger);
 			
 		
 		if (transform.GetComponent<CharacterMotor>().GetCrouched() == true)
@@ -185,6 +243,8 @@ public class CheckVisibility : MonoBehaviour
 				if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
 				{
 					Hunger = 0;
+					corpse.tag = "Untagged";
+					Debug.Log ("!HUIWDH");
 				}
 			}
 		}
