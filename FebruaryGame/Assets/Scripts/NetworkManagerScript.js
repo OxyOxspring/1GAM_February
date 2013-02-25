@@ -2,6 +2,7 @@ var PlayerPrefab:GameObject;
 var RatPrefab:GameObject;
 var SpiritPrefab:GameObject;
 var SpiritPrefabUntagged:GameObject;
+var CorpsePrefab:GameObject;
 var LeaderBoard:GameObject;
 var GameTimer:float;
 var GameTimerRunning:boolean;
@@ -164,6 +165,8 @@ function swapPlayerForSpirit (player:GameObject){
 
 	if (player.networkView.isMine)
 	{
+		Network.Instantiate(CorpsePrefab, player.transform.position, Quaternion.identity, 0);
+	
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit);
 		
 		chooseSpiritSpawn();

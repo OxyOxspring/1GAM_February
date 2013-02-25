@@ -20,6 +20,7 @@ public class CheckVisibility : MonoBehaviour
 	private float sinheart2 = 0;
 	private float heart3 = 0;
 	private float sinheart3 = 0;
+	public GameObject NetworkManager;
 	
 	public float InsanityProgress
 	{
@@ -65,7 +66,7 @@ public class CheckVisibility : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	
+		NetworkManager = GameObject.FindGameObjectWithTag("NetworkManager");
 	}
 	
 	// Update is called once per frame
@@ -228,26 +229,30 @@ public class CheckVisibility : MonoBehaviour
 		}
 
 		
-		if (Hunger < 100)	
+		if (HungerProgress < 1)	
 		{
 			Hunger += Time.deltaTime * HungerRate;
-		}
-		//Debug.Log (Hunger);
+
 			
-		
-		if (transform.GetComponent<CharacterMotor>().GetCrouched() == true)
-		{
-			foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
+			if (HungerProgress >= 0.25)
 			{
-				// If the player is over a corpse, eat it.
-				if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
+				if (transform.GetComponent<CharacterMotor>().GetCrouched() == true)
 				{
-					Hunger = 0;
-					corpse.tag = "Untagged";
-					Debug.Log ("!HUIWDH");
+					foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
+					{
+						// If the player is over a corpse, eat it.
+						if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
+						{
+							Hunger = 0;
+							
+							//NetworkManager.networkView.RPC ("nomCorpse", RPCMode.All, corpse);
+							Network.Destroy (corpse);
+						}
+					}
 				}
 			}
 		}
+		
 		
 	}
 }

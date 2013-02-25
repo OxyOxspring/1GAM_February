@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\FacePlayer.cs" />
      <Compile Include="Assets\Scripts\CheckVisibility.cs" />
+     <Compile Include="Assets\Scripts\CorpseNommage.cs" />
      <Compile Include="Assets\Scripts\CritterAI.cs" />
      <Compile Include="Assets\Scripts\Data.cs" />
      <Compile Include="Assets\Scripts\GenericFloatyScript.cs" />
