@@ -15,12 +15,8 @@ public class CheckVisibility : MonoBehaviour
 	public float Hunger = 50;
 	public float HungerRate = 0.6f;
 	private float heart1 = 0;
-	private float sinheart1 = 0;
-	private float heart2 = 2 * Mathf.PI * 0.3f;
-	private float sinheart2 = 0;
+	private float heart2 = 2 * Mathf.PI * 0.4f;
 	private float heart3 = 0;
-	private float sinheart3 = 0;
-	public GameObject NetworkManager;
 	
 	public float InsanityProgress
 	{
@@ -66,7 +62,7 @@ public class CheckVisibility : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		NetworkManager = GameObject.FindGameObjectWithTag("NetworkManager");
+
 	}
 	
 	// Update is called once per frame
@@ -112,19 +108,19 @@ public class CheckVisibility : MonoBehaviour
 			if (otherPlayer.transform != transform)
 			{
 				// Check if the other player is in range or lit by a point light.
-				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 9f || IsTransformLit (otherPlayer.transform))
+				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 13f || IsTransformLit (otherPlayer.transform))
 				{
 					// Check if the other player is within the view of this player's camera view.
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))
 					{	
 						// Check if the other player is behind a surface (default layer 1 to ignore players)
 						if (Physics.Linecast (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0), 1) == false ||
-							Physics.Linecast (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0), 1) == false ||
+							
 							Physics.Linecast (transform.position, otherPlayer.transform.position, 1) == false)
 						{
 							IsLookingAtSomeone = true;
 							Debug.DrawLine (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
-							Debug.DrawLine (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
+							//Debug.DrawLine (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
 							Debug.DrawLine (transform.position, otherPlayer.transform.position);
 							break;
 						}
@@ -164,8 +160,6 @@ public class CheckVisibility : MonoBehaviour
 	
 	void HandleHunger()
 	{	
-		
-		
 		ScreenOverlay[] over = transform.Find ("Camera").GetComponents<ScreenOverlay>();
 		Vignetting vig = transform.Find ("Camera").GetComponent<Vignetting>();
 		Fisheye fish = transform.Find ("Camera").GetComponent<Fisheye>();
@@ -180,8 +174,6 @@ public class CheckVisibility : MonoBehaviour
 			heart1 += Time.deltaTime * 3;
 		}
 		
-		float sinheart1 = Mathf.Sin (heart1 + Mathf.PI / 4);
-		
 		if (heart2 >= Mathf.PI * 2)
 		{
 			heart2 = 0;
@@ -190,8 +182,6 @@ public class CheckVisibility : MonoBehaviour
 		{
 			heart2 += Time.deltaTime * 3;
 		}	
-		
-		float sinheart2 = Mathf.Cos (heart2 + Mathf.PI / 4);
 		
 		if (heart3 >= Mathf.PI * 2)
 		{
@@ -202,11 +192,11 @@ public class CheckVisibility : MonoBehaviour
 			heart3 += Time.deltaTime * 1.5f;	
 		}
 		
-		float sinheart3 = Mathf.Cos (heart1 / 2);
+		float sinheart = Mathf.Cos (heart1 / 2);
 		
 		float heartsin = 0;
 		
-		if (sinheart3 > 0)
+		if (sinheart > 0)
 		{
 			heartsin = Mathf.Max(0, Mathf.Max(Mathf.Sin(heart1), Mathf.Sin (heart2)));
 		}
@@ -217,14 +207,16 @@ public class CheckVisibility : MonoBehaviour
 			
 			over[0].intensity = modhung * 0.8f + 0.4f * heartsin;
 			over[1].intensity = modhung * 0.8f - 0.4f * heartsin;
-			vig.intensity = 5 + modhung * 6 + 2 * heartsin;
-			fish.strengthX = fish.strengthY = 0.15f + modhung * 0.75f;
+			vig.intensity = 5 + modhung * 3 + 2 * heartsin;
+			vig.blur = 1;
+			fish.strengthX = fish.strengthY = 0.15f + modhung * 0.75f + (modhung / 6) * heartsin + 0.02f * Mathf.Sin (heart1);;
 		}
 		else
 		{
 			over[0].intensity = 0;
 			over[1].intensity = 0;
 			vig.intensity = 5 ;
+			vig.blur = 0;
 			fish.strengthX = fish.strengthY = 0.15f;
 		}
 
@@ -245,8 +237,7 @@ public class CheckVisibility : MonoBehaviour
 						{
 							Hunger = 0;
 							
-							//NetworkManager.networkView.RPC ("nomCorpse", RPCMode.All, corpse);
-							Network.Destroy (corpse);
+							corpse.networkView.RPC ("Nom", RPCMode.All, 1);
 						}
 					}
 				}

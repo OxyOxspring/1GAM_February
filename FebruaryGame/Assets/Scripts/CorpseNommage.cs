@@ -14,16 +14,18 @@ public class CorpseNommage : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Nommage < 0)
+
+	}
+	
+	[RPC]
+	public void Nom(int amount)
+	{
+		Nommage -= amount;	
+		
+		if (Nommage <= 0)
 		{
+			audio.Play ();
 			Network.Destroy (gameObject);	
 		}
 	}
-	
-	public void ReduceNommage()
-	{
-		Nommage--;	
-	}
-	
-
 }

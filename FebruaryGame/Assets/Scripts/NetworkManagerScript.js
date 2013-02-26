@@ -77,6 +77,7 @@ function Update(){
 		}
 	}
 	
+	
 	killPlayers();
 }
 
@@ -199,6 +200,11 @@ function swapPlayerForSpirit (player:GameObject){
 				instance.GetComponent("SpiritScript").SendMessage("Tether", alive);
 			}
 		}
+		
+		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
+		{
+			corpse.transform.FindChild("CorpseBeam").renderer.enabled = false;
+		}
 	}
 }
 
@@ -226,6 +232,11 @@ function swapSpiritForPlayer(spirit:GameObject)
 					fudge.enabled = false;
 				}
 			}
+		}
+		
+		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
+		{
+			corpse.transform.FindChild("CorpseBeam").renderer.enabled = true;
 		}
 	}
 }
