@@ -11,13 +11,17 @@ public class FacePlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		foreach (GameObject player in GameObject.FindGameObjectsWithTag("	"))
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		if (players.Length > 0)
 		{
-			if (player.networkView.isMine)
+			foreach (GameObject player in players)
 			{
-				transform.LookAt (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
-				transform.Rotate (90, 0, 0);
+				if (player.networkView.isMine)
+				{
+					transform.LookAt (new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
+					transform.Rotate (90, 0, 0);
+				}
 			}
-		}
+		}	
 	}
 }
