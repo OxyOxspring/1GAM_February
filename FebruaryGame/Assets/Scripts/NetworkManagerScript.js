@@ -283,7 +283,7 @@ function OnMasterServerEvent(mse:MasterServerEvent){
 //GUI
 function OnGUI(){
 	if(!Network.isClient && !Network.isServer){
-	stringToEdit = GUI.TextField(Rect(btnX,btnY,btnW,btnH/5),stringToEdit,16);
+	stringToEdit = GUI.TextField(Rect(btnX,btnY,btnW,btnH/5),stringToEdit,8);
 		
 		if(GUI.Button(Rect(btnX,btnY * 1.5,btnW,btnH),"Start Server"))
 		{

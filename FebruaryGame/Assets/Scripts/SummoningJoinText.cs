@@ -34,7 +34,7 @@ public class SummoningJoinText : MonoBehaviour
 		
 		if (Network.isServer)
 		{
-			if (potatoes == mashed && potatoes > 0)
+			if (potatoes == mashed && potatoes > 1)
 			{
 				thyme += Time.deltaTime;
 				
