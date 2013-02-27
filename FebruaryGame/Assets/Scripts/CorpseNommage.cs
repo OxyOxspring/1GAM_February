@@ -27,5 +27,13 @@ public class CorpseNommage : MonoBehaviour {
 			audio.Play ();
 			Network.Destroy (gameObject);	
 		}
+		else if (Nommage == 2)
+		{
+			transform.FindChild ("Head").renderer.enabled = false;	
+		}
+		else if (Nommage == 1)
+		{
+			transform.FindChild ("Body").renderer.enabled = false;	
+		}
 	}
 }
