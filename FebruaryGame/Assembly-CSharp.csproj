@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SpiritScript.cs" />
      <Compile Include="Assets\Scripts\SummoningJoinText.cs" />
+     <Compile Include="Assets\Scripts\WibbleScript.cs" />
      <Compile Include="Assets\Scripts\WindRotation.cs" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />

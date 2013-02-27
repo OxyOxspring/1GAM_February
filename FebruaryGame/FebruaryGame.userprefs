@@ -1,9 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CorpseNommage.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WibbleScript.cs">
     <Files>
+      <File FileName="Assets\Scripts\WibbleScript.cs" Line="32" Column="56" />
       <File FileName="Assets\Scripts\CorpseNommage.cs" Line="28" Column="34" />
-      <File FileName="Assets\FacePlayer.cs" Line="25" Column="4" />
+      <File FileName="Assets\FacePlayer.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CheckVisibility.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="1" Column="1" />
     </Files>
