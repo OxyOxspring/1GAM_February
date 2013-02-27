@@ -22,13 +22,16 @@ public class SummoningJoinText : MonoBehaviour
 		{			
 			if (spirit.networkView.isMine)
 			{
-				transform.LookAt (new Vector3(spirit.transform.position.x, spirit.transform.position.y, spirit.transform.position.z));
+				Transform camera = spirit.transform.FindChild ("Camera");
+				
+				transform.LookAt (new Vector3(camera.position.x, camera.position.y, camera.position.z));
 				transform.Rotate (new Vector3(0, 180, 0));
 			}
 			
 			if (Vector3.Distance (transform.position, spirit.transform.position) < 9f)
 			{
 				potatoes++;	
+				
 			}
 		}
 		

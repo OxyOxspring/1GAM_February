@@ -9,7 +9,7 @@ public class SpiritScript : MonoBehaviour
 	
 	// Use this for initialization
 	void Start ()
-	{
+	{		
 		FixedYPosition = transform.position.y;
 		if (networkView.isMine)
 		{

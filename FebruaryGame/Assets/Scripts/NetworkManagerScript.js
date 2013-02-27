@@ -26,6 +26,9 @@ var sprspawn5:GameObject;
 
 var SpiritRealm:GameObject;
 
+private var players:int = -1;
+private var player:int = -1;
+
 private var spawnObject:GameObject;
 private var spiritspawnObject:GameObject;
 var gameName:String = "OxyOxspringFebNetworking";
@@ -40,7 +43,6 @@ private var btnY:float;
 private var btnW:float;
 private var btnH:float;
 
-
 function Start(){
 	btnX = Screen.width * 0.05;
 	btnY = Screen.width * 0.05;
@@ -51,7 +53,7 @@ function Start(){
 }
 
 function startServer(){
-Network.InitializeServer(10,25001,!Network.MovePublicAddress);
+Network.InitializeServer(9,25001,!Network.MovePublicAddress);
 MasterServer.RegisterHost(gameName,"Hideous", "Become Hideous...");
 }
 
@@ -85,43 +87,43 @@ function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpiritSpawn();
 	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
+	networkView.RPC("IncrementPlayerCount", RPCMode.All);
 }
 
 function choosePlayerSpawn()
 {
-	var randomnumber = Random.Range(1,10);
-	switch (randomnumber)
+	switch (player)
 	{
+		case 0:
+			spawnObject = plrspawn1;
+			break;
 		case 1:
-		spawnObject = plrspawn1;
-		break;
+			spawnObject = plrspawn2;
+			break;
 		case 2:
-		spawnObject = plrspawn2;
-		break;
+			spawnObject = plrspawn3;
+			break;
 		case 3:
-		spawnObject = plrspawn3;
-		break;
+			spawnObject = plrspawn4;
+			break;
 		case 4:
-		spawnObject = plrspawn4;
-		break;
+			spawnObject = plrspawn5;
+			break;
 		case 5:
-		spawnObject = plrspawn5;
-		break;
+			spawnObject = plrspawn6;
+			break;
 		case 6:
-		spawnObject = plrspawn1;
-		break;
+			spawnObject = plrspawn7;
+			break;
 		case 7:
-		spawnObject = plrspawn2;
-		break;
+			spawnObject = plrspawn8;
+			break;
 		case 8:
-		spawnObject = plrspawn3;
-		break;
+			spawnObject = plrspawn9;
+			break;
 		case 9:
-		spawnObject = plrspawn4;
-		break;
-		case 10:
-		spawnObject = plrspawn5;
-		break;
+			spawnObject = plrspawn10;
+			break;		
 	}
 }
 
@@ -260,6 +262,7 @@ function OnServerInitialized(){
 
 function OnConnectedToServer(){
 	spawnPlayer();
+
 	//script.enabled = true;
 }
 
@@ -365,6 +368,34 @@ function syncLeaderboardEntry(name:String, time:float, index:int)
 		// Record a time (and push to the next index).
 		LeaderBoard.SendMessage("RecordTime", time);
 	}
+}	
+
+@RPC
+function IncrementPlayerCount()
+{
+	if (Network.isServer)
+	{
+		players++;
+		
+		if (player == -1)
+		{
+			player = players;
+		}
+		
+		networkView.RPC("ClientPlayerCount", RPCMode.All, players);
+	}
 }
 
-
+@RPC
+function ClientPlayerCount(amount:int)
+{
+	if (Network.isClient)
+	{
+		players = amount;
+		
+		if (player == -1)
+		{
+			player = players;
+		}
+	}
+}
