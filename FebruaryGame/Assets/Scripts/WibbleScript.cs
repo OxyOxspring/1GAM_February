@@ -28,7 +28,7 @@ public class WibbleScript : MonoBehaviour
 		
 		float seedything = Mathf.Sin(seed);
 		
-		transform.localScale = new Vector3(scale + seedything, scale + seedything, scale + seedything);
+		transform.localScale = new Vector3(scale, scale + (seedything * 2), scale + (seedything * 1));
 		transform.Rotate (new Vector3(0,1,0), seedything / 10);
 	}
 }

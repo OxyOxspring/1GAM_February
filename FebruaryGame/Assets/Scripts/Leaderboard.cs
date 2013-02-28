@@ -5,6 +5,7 @@ public class Leaderboard : MonoBehaviour
 {
 	public GameObject networkManager;
 	
+	private string[] playersconnected = new string[10];
 	private string[] names = new string[10];
 	private float[] times = new float[10];
 	private int entrycounter = 0;
@@ -30,8 +31,16 @@ public class Leaderboard : MonoBehaviour
 			
 			if (names[0] == "")	// If there are no entries.
 			{
-				name.text = "";
-				time.text = "";
+				if (playersconnected[i] != "")
+				{
+					name.text = playersconnected[i];
+					time.text = " has joined...";
+				}
+				else
+				{
+					name.text = "";
+					time.text = "";
+				}
 			}
 			else
 			{
@@ -94,6 +103,12 @@ public class Leaderboard : MonoBehaviour
 		SortEntries ();
 	}
 	
+	public void RecordPlayer(string player)
+	{
+		playersconnected[entrycounter] = player;
+		Debug.Log ("Entry Counter" + entrycounter.ToString());
+	}
+	
 	public void NextIndex()
 	{
 		if (entrycounter < 10)
@@ -127,6 +142,7 @@ public class Leaderboard : MonoBehaviour
 		{
 			names[i] = "";
 			times[i] = 0;
+			playersconnected[i] = "";
 		}
 		entrycounter = 0;
 	}
@@ -137,7 +153,7 @@ public class Leaderboard : MonoBehaviour
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				networkManager.networkView.RPC ("syncLeaderboardEntry", RPCMode.All, names[i], times[i], i);
+				networkManager.networkView.RPC ("syncLeaderboardEntry", RPCMode.All, names[i], times[i], i, playersconnected[i]);
 			}				
 		}
 	}

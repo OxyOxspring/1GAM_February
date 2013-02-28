@@ -32,7 +32,7 @@ private var player:int = -1;
 private var spawnObject:GameObject;
 private var spiritspawnObject:GameObject;
 var gameName:String = "OxyOxspringFebNetworking";
-private var stringToEdit : String = "Input Username";
+private var stringToEdit : String = "";
 private var displayString : String = "";
 
 private var refreshing:boolean = false;
@@ -50,9 +50,12 @@ function Start(){
 	btnH = Screen.width * 0.1;
 	
 	Screen.SetResolution(1280, 720, false, 60);
+MasterServer.ipAddress = "192.168.0.27";
+MasterServer.port = 23466;
 }
 
 function startServer(){
+
 Network.InitializeServer(9,25001,!Network.MovePublicAddress);
 MasterServer.RegisterHost(gameName,"Hideous", "Become Hideous...");
 }
@@ -87,6 +90,7 @@ function spawnPlayer(){
 networkView.RPC("updateString",RPCMode.AllBuffered,stringToEdit);
 chooseSpiritSpawn();
 	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
+	networkView.RPC("leaderboardRecordPlayer", RPCMode.All, stringToEdit);
 	networkView.RPC("IncrementPlayerCount", RPCMode.All);
 }
 
@@ -215,8 +219,11 @@ function swapSpiritForPlayer(spirit:GameObject)
 	if (spirit.networkView.isMine)
 	{	
 		choosePlayerSpawn();
+		PlayerPrefab.transform.FindChild("Graphics").renderer.enabled = false;
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
+		PlayerPrefab.transform.FindChild("Graphics").renderer.enabled = true;
 		Network.Destroy(spirit);
+		
 		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{
@@ -262,7 +269,6 @@ function OnServerInitialized(){
 
 function OnConnectedToServer(){
 	spawnPlayer();
-
 	//script.enabled = true;
 }
 
@@ -286,7 +292,7 @@ function OnMasterServerEvent(mse:MasterServerEvent){
 //GUI
 function OnGUI(){
 	if(!Network.isClient && !Network.isServer){
-	stringToEdit = GUI.TextField(Rect(btnX,btnY,btnW,btnH/5),stringToEdit,8);
+	stringToEdit = GUI.TextField(Rect(btnX,btnY,btnW,btnH/5),stringToEdit,12);
 		
 		if(GUI.Button(Rect(btnX,btnY * 1.5,btnW,btnH),"Start Server"))
 		{
@@ -337,6 +343,15 @@ function leaderboardRecordEntry(name:String)
 }
 
 @RPC
+function leaderboardRecordPlayer(player:String)
+{
+	if (Network.isServer)
+	{
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordPlayer", player);
+	}
+}
+
+@RPC
 function forceAllSpawn()
 {
 	if (Network.isServer)
@@ -353,7 +368,7 @@ function forceAllSpawn()
 }
 
 @RPC
-function syncLeaderboardEntry(name:String, time:float, index:int)
+function syncLeaderboardEntry(name:String, time:float, index:int, player:String)
 {	
 	Debug.Log("Syncing...");
 
@@ -367,6 +382,9 @@ function syncLeaderboardEntry(name:String, time:float, index:int)
 		
 		// Record a time (and push to the next index).
 		LeaderBoard.SendMessage("RecordTime", time);
+		
+		// This is really stupid because its only shown at the start of the game, but I guess it could be used somewhere later.
+		LeaderBoard.SendMessage("RecordPlayer", player);
 	}
 }	
 

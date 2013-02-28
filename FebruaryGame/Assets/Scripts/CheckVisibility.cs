@@ -225,24 +225,26 @@ public class CheckVisibility : MonoBehaviour
 		{
 			Hunger += Time.deltaTime * HungerRate;
 
-			
-			if (HungerProgress >= 0.25)
+			if (over[2].intensity == 0)
 			{
-				if (transform.GetComponent<CharacterMotor>().GetCrouched() == true)
+				Debug.Log ("First pass");
+				foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
 				{
-					foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
+					// If the player is over a corpse, eat it.
+					if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
 					{
-						// If the player is over a corpse, eat it.
-						if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
-						{
-							Hunger = 0;
-							
-							corpse.networkView.RPC ("Nom", RPCMode.All, 1);
-						}
+						Hunger = 0;
+						over[2].intensity = 10;
+						corpse.networkView.RPC ("Nom", RPCMode.All, 1);
 					}
 				}
 			}
+			else
+			{
+				over[2].intensity = Mathf.Max(0, over[2].intensity - Time.deltaTime * 20);	
+			}
 		}
+	
 		
 		
 	}
