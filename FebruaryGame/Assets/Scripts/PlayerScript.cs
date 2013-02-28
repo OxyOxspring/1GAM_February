@@ -5,6 +5,7 @@ public class PlayerScript : MonoBehaviour
 {
 	private float badspawntimer = 0;
 	private GameObject networkManager;
+	public bool HasBeenTethered = false;
 	
 	// Use this for initialization
 	void Start () {

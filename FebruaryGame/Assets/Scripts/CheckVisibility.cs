@@ -14,6 +14,8 @@ public class CheckVisibility : MonoBehaviour
 	public int audiolevel = 0;
 	public float Hunger = 50;
 	public float HungerRate = 0.6f;
+	private float eatTimer = 0;
+	private float eatDuration = 2;
 	private float heart1 = 0;
 	private float heart2 = 2 * Mathf.PI * 0.4f;
 	private float heart3 = 0;
@@ -224,8 +226,8 @@ public class CheckVisibility : MonoBehaviour
 		if (HungerProgress < 1)	
 		{
 			Hunger += Time.deltaTime * HungerRate;
-
-			if (over[2].intensity == 0)
+			
+			if (eatTimer >= eatDuration)
 			{
 				Debug.Log ("First pass");
 				foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
@@ -233,6 +235,7 @@ public class CheckVisibility : MonoBehaviour
 					// If the player is over a corpse, eat it.
 					if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(corpse.transform.position.x, 0, corpse.transform.position.z)) < 1.0f)
 					{
+						eatTimer = 0;
 						Hunger = 0;
 						over[2].intensity = 10;
 						corpse.networkView.RPC ("Nom", RPCMode.All, 1);
@@ -242,6 +245,7 @@ public class CheckVisibility : MonoBehaviour
 			else
 			{
 				over[2].intensity = Mathf.Max(0, over[2].intensity - Time.deltaTime * 20);	
+				eatTimer += Time.deltaTime;
 			}
 		}
 	

@@ -50,8 +50,8 @@ function Start(){
 	btnH = Screen.width * 0.1;
 	
 	Screen.SetResolution(1280, 720, false, 60);
-MasterServer.ipAddress = "192.168.0.27";
-MasterServer.port = 23466;
+//MasterServer.ipAddress = "192.168.0.27";
+//MasterServer.port = 23466;
 }
 
 function startServer(){
@@ -200,10 +200,11 @@ function swapPlayerForSpirit (player:GameObject){
 		// Tether an untagged spirit to every existing player.
 		for (var alive:GameObject in GameObject.FindGameObjectsWithTag("Player"))
 		{
-			if (alive != player)	// Only the player owning the network connection will have a camera enabled.
+			if (alive != player && alive.GetComponent("PlayerScript").HasBeenTethered == false)	// Only the player owning the network connection will have a camera enabled.
 			{
 				var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
 				instance.GetComponent("SpiritScript").SendMessage("Tether", alive);
+				alive.GetComponent("PlayerScript").HasBeenTethered = true;
 			}
 		}
 		
@@ -241,6 +242,12 @@ function swapSpiritForPlayer(spirit:GameObject)
 					fudge.enabled = false;
 				}
 			}
+		}
+		
+		// Unspawn spirits.
+		for (var untethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
+		{
+			Destroy(untethered);
 		}
 		
 		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
