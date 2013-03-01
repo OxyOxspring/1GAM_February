@@ -429,18 +429,23 @@ function removeShit()
 		for (var tethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
 		{
 			var pep_pep:GameObject = tethered.GetComponent("SpiritScript").TetheredObject;
+			Debug.Log(pep_pep.ToString());
 		
 			var found:boolean = false;
-			for (var player:GameObject in GameObject.FindGameObejctsWithTag("Player"))
+			for (var player:GameObject in GameObject.FindGameObjectsWithTag("Player"))
 			{
 				if (pep_pep == player)
 				{
-					found = true;
+					if (player.active == false)
+					{
+						found = true;
+					}
+					Debug.Log(player);
 					break;
 				}
 			}	
 		
-			if (found == true)
+			if (found == false)
 			{
 				Destroy(tethered);
 			}
