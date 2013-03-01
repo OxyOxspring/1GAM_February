@@ -24,6 +24,7 @@ var sprspawn3:GameObject;
 var sprspawn4:GameObject;
 var sprspawn5:GameObject;
 
+private var isAlive:boolean = false;
 var SpiritRealm:GameObject;
 
 private var players:int = -1;
@@ -172,9 +173,11 @@ function swapPlayerForSpirit (player:GameObject){
 
 	if (player.networkView.isMine)
 	{
+		isAlive = false;
 		Network.Instantiate(CorpsePrefab, player.transform.position, Quaternion.identity, 0);
 	
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit);
+		networkView.RPC("removeShit", RPCMode.All);
 		
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
@@ -197,7 +200,7 @@ function swapPlayerForSpirit (player:GameObject){
 			}
 		}
 		
-		// Tether an untagged spirit to every existing player.
+				// Tether an untagged spirit to every existing player.
 		for (var alive:GameObject in GameObject.FindGameObjectsWithTag("Player"))
 		{
 			if (alive != player && alive.GetComponent("PlayerScript").HasBeenTethered == false)	// Only the player owning the network connection will have a camera enabled.
@@ -207,11 +210,6 @@ function swapPlayerForSpirit (player:GameObject){
 				alive.GetComponent("PlayerScript").HasBeenTethered = true;
 			}
 		}
-		
-		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
-		{
-			corpse.transform.FindChild("CorpseBeam").renderer.enabled = false;
-		}
 	}
 }
 
@@ -219,6 +217,7 @@ function swapSpiritForPlayer(spirit:GameObject)
 {
 	if (spirit.networkView.isMine)
 	{	
+		isAlive = true;
 		choosePlayerSpawn();
 		PlayerPrefab.transform.FindChild("Graphics").renderer.enabled = false;
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
@@ -243,30 +242,7 @@ function swapSpiritForPlayer(spirit:GameObject)
 				}
 			}
 		}
-		
-		// Unspawn spirits.
-//		for (var untethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
-//		{
-//			Destroy(untethered);
-//		}
-//		
-//		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
-//		{
-//			corpse.transform.FindChild("CorpseBeam").renderer.enabled = true;
-//		}
 	}
-	
-			
-		// Unspawn spirits.
-		for (var untethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
-		{
-			Destroy(untethered);
-		}
-		
-		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
-		{
-			corpse.transform.FindChild("CorpseBeam").renderer.enabled = true;
-		}
 }
 
 function beginTimer()
@@ -433,6 +409,41 @@ function ClientPlayerCount(amount:int)
 		if (player == -1)
 		{
 			player = players;
+		}
+	}
+}
+
+@RPC
+function removeShit()
+{
+	if (isAlive == false)
+	{
+		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
+		{
+			corpse.transform.FindChild("CorpseBeam").renderer.enabled = false;
+		}
+		
+		// THIS DOESNT WORK
+		
+		// Unspawn spirits.
+		for (var tethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
+		{
+			var pep_pep:GameObject = tethered.GetComponent("SpiritScript").TetheredObject;
+		
+			var found:boolean = false;
+			for (var player:GameObject in GameObject.FindGameObejctsWithTag("Player"))
+			{
+				if (pep_pep == player)
+				{
+					found = true;
+					break;
+				}
+			}	
+		
+			if (found == true)
+			{
+				Destroy(tethered);
+			}
 		}
 	}
 }
