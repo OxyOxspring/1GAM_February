@@ -50,8 +50,8 @@ function Start(){
 	btnH = Screen.width * 0.1;
 	
 	Screen.SetResolution(1280, 720, false, 60);
-//MasterServer.ipAddress = "192.168.0.27";
-//MasterServer.port = 23466;
+MasterServer.ipAddress = "192.168.0.27";
+MasterServer.port = 23466;
 }
 
 function startServer(){
@@ -245,6 +245,19 @@ function swapSpiritForPlayer(spirit:GameObject)
 		}
 		
 		// Unspawn spirits.
+//		for (var untethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
+//		{
+//			Destroy(untethered);
+//		}
+//		
+//		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
+//		{
+//			corpse.transform.FindChild("CorpseBeam").renderer.enabled = true;
+//		}
+	}
+	
+			
+		// Unspawn spirits.
 		for (var untethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))
 		{
 			Destroy(untethered);
@@ -254,7 +267,6 @@ function swapSpiritForPlayer(spirit:GameObject)
 		{
 			corpse.transform.FindChild("CorpseBeam").renderer.enabled = true;
 		}
-	}
 }
 
 function beginTimer()

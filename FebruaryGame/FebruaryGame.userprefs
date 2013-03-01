@@ -1,12 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CheckVisibility.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetworkManagerScript.js">
     <Files>
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="54" Column="3" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="261" Column="1" />
       <File FileName="Assets\Scripts\WibbleScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Leaderboard.cs" Line="31" Column="4" />
+      <File FileName="Assets\Scripts\Leaderboard.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CorpseNommage.cs" Line="1" Column="9" />
-      <File FileName="Assets\Scripts\SpiritScript.cs" Line="36" Column="22" />
+      <File FileName="Assets\Scripts\SpiritScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CheckVisibility.cs" Line="238" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
