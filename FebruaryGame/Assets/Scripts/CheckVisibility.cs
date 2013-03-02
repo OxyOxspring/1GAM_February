@@ -137,7 +137,7 @@ public class CheckVisibility : MonoBehaviour
 		// If the player is looking at someone, increase their insanity, else decrease the insanity until it reaches zero.
 		if (IsLookingAtSomeone)
 		{			
-			Insanity += Time.deltaTime * InsanityRate + 5	0 * HungerProgress ;
+			Insanity += Time.deltaTime * InsanityRate + 50 * HungerProgress ;
 			audiolevel += Mathf.CeilToInt(Time.deltaTime) * 2;
 		}
 		else
