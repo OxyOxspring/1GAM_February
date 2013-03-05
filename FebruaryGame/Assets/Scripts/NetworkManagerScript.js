@@ -32,9 +32,10 @@ private var player:int = -1;
 
 private var spawnObject:GameObject;
 private var spiritspawnObject:GameObject;
-var gameName:String = "OxyOxspringFebNetworking";
+var gameName:String = "HideousNetworking";
 private var stringToEdit : String = "";
 private var displayString : String = "";
+private var connectedTime:float = 0;
 
 private var refreshing:boolean = false;
 private var hostData:HostData[];
@@ -44,6 +45,9 @@ private var btnY:float;
 private var btnW:float;
 private var btnH:float;
 
+MasterServer.ipAddress = "192.168.0.27";
+MasterServer.port = 23466;
+
 function Start(){
 	btnX = Screen.width * 0.05;
 	btnY = Screen.width * 0.05;
@@ -51,8 +55,7 @@ function Start(){
 	btnH = Screen.width * 0.1;
 	
 	Screen.SetResolution(1280, 720, false, 60);
-MasterServer.ipAddress = "192.168.0.27";
-MasterServer.port = 23466;
+
 }
 
 function startServer(){
@@ -264,6 +267,9 @@ function OnServerInitialized(){
 
 function OnConnectedToServer(){
 	spawnPlayer();
+	
+	connectedTime = Time.time;
+	networkView.RPC("CheckPlayer", RPCMode.All, stringToEdit, connectedTime);
 	//script.enabled = true;
 }
 
@@ -303,6 +309,10 @@ function OnGUI(){
 		if(hostData){
 			for(var i:int = 0; i < hostData.length; i++){
 				if(GUI.Button(Rect(btnX * 2 + btnW, btnY * 1.2 + (btnH*i),btnW*3,btnH*0.5),hostData[i].comment)){
+				
+					// CHECK IF PLAYER NAME IS ALREADY ON THE SERVER OR ADD A NUMBER TO THE END IF MULTIPLE.
+					
+				
 					Network.Connect(hostData[i]);
 				}
 			}
@@ -413,6 +423,8 @@ function ClientPlayerCount(amount:int)
 	}
 }
 
+
+
 @RPC
 function removeShit()
 {
@@ -450,5 +462,35 @@ function removeShit()
 				Destroy(tethered);
 			}
 		}
+	}
+}
+
+@RPC
+function CheckPlayer(name:String, time:float)
+{
+	if (stringToEdit == name)
+	{
+		if (connectedTime < time)
+		{
+			// If this time is older than the time sent through the function, echo the function back.
+			networkView.RPC("CheckPlayer", RPCMode.All, stringToEdit, connectedTime);
+		}
+		else if (connectedTime > time)
+		{
+			// If this time is younger than the time sent through the function, modify the name.
+			networkView.RPC("Rename", RPCMode.All, stringToEdit, stringToEdit + "0");
+			stringToEdit += "0";
+			networkView.RPC("CheckPlayer", RPCMode.All, stringToEdit, connectedTime);
+		}
+	}
+}
+
+@RPC
+function Rename(name:String, newname:String)
+{
+	if (Network.isServer)
+	{
+		LeaderBoard.GetComponent("Leaderboard").SendMessage("RecordPlayer", newname);
+		//LeaderBoard.GetComponent("Leaderboard").SendMessage("Rename", name, newname);
 	}
 }

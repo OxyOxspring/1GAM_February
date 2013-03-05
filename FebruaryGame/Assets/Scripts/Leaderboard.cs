@@ -105,8 +105,27 @@ public class Leaderboard : MonoBehaviour
 	
 	public void RecordPlayer(string player)
 	{
-		playersconnected[entrycounter] = player;
-		Debug.Log ("Entry Counter" + entrycounter.ToString());
+		for (int i = 0; i < playersconnected.Length; i++)
+		{
+			if (playersconnected[i] == player)
+			{
+				break;	
+			}
+			
+			if (playersconnected[i] == "")
+			{
+				playersconnected[i] = player;
+				break;	
+			}
+		}
+	}
+	
+	public void ClearPlayers()
+	{
+		for (int i =0 ;i < 10; i++)
+		{
+			playersconnected[i] = "";
+		}
 	}
 	
 	public void NextIndex()
@@ -155,6 +174,19 @@ public class Leaderboard : MonoBehaviour
 			{
 				networkManager.networkView.RPC ("syncLeaderboardEntry", RPCMode.All, names[i], times[i], i, playersconnected[i]);
 			}				
+		}
+	}
+	
+	public void Rename(string name)
+	{
+		for (int i = 0; i < 10; i++)	
+		{
+			
+ 			if (playersconnected[i] == name)	
+			{
+				playersconnected[i] = name + "0";
+				break;
+			}
 		}
 	}
 	
