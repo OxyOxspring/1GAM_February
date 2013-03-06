@@ -30,13 +30,22 @@ public class Lightning : MonoBehaviour
 		// Basic timer for flash.
 		if (flashTimer >= flashDelay)
 		{
-			light.intensity = FlashIntensity;
+			if (flashDelay != 0)
+			{
+				light.intensity = FlashIntensity;
+			}
 			
-			// Make a random delay until the next lightning strike to ensure a lightning strike WILL happen.
-			flashDelay = Random.Range(20, 60);
-
-			// Give the thunder a random delay.
-			thunderDelay = Random.Range (1, 4);	
+			// Sync if you're the server.
+			if (Network.isServer)
+			{
+				// Make a random delay until the next lightning strike to ensure a lightning strike WILL happen.
+				flashDelay = Random.Range(20, 60);
+	
+				// Give the thunder a random delay.
+				thunderDelay = Random.Range (1, 4);	
+			
+				networkView.RPC("Sync", RPCMode.All, flashDelay, thunderDelay);
+			}
 
 			flashTimer = 0;
 		}
@@ -62,4 +71,12 @@ public class Lightning : MonoBehaviour
 			}
 		}
 	}
+	
+	[RPC]
+	void Sync(float delay, float delay2)
+	{
+		flashDelay = delay;
+		thunderDelay = delay2;
+	}
+	
 }

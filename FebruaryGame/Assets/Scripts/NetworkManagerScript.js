@@ -183,7 +183,8 @@ function swapPlayerForSpirit (player:GameObject){
 		Network.Instantiate(CorpsePrefab, player.transform.position, Quaternion.identity, 0);
 	
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit);
-		networkView.RPC("removeShit", RPCMode.All);
+		//networkView.RPC("removeShit", RPCMode.All);
+		removeShit();
 		
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
@@ -433,7 +434,7 @@ function ClientPlayerCount(amount:int)
 
 
 
-@RPC
+
 function removeShit()
 {
 	if (isAlive == false)
@@ -442,8 +443,6 @@ function removeShit()
 		{
 			corpse.transform.FindChild("CorpseBeam").renderer.enabled = false;
 		}
-		
-		// THIS DOESNT WORK
 		
 		// Unspawn spirits.
 		for (var tethered:GameObject in GameObject.FindGameObjectsWithTag("SpiritAlive"))

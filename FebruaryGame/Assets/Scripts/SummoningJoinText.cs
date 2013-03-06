@@ -28,7 +28,7 @@ public class SummoningJoinText : MonoBehaviour
 				transform.Rotate (new Vector3(0, 180, 0));
 			}
 			
-			if (Vector3.Distance (transform.position, spirit.transform.position) < 9f)
+			if (Vector3.Distance (transform.position, spirit.transform.position) < 9.5f)
 			{
 				potatoes++;	
 				
