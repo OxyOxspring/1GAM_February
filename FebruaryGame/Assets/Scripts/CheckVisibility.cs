@@ -229,7 +229,6 @@ public class CheckVisibility : MonoBehaviour
 			
 			if (eatTimer >= eatDuration)
 			{
-				Debug.Log ("First pass");
 				foreach (GameObject corpse in GameObject.FindGameObjectsWithTag("Corpse"))
 				{
 					// If the player is over a corpse, eat it.

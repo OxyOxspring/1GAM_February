@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-MasterServer.ipAddress = "192.168.0.27";
-MasterServer.port = 23466;
-
 public class CorpseNommage : MonoBehaviour {
 	
 	public int Nommage = 3;

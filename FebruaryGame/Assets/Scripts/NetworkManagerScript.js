@@ -48,6 +48,9 @@ private var btnH:float;
 MasterServer.ipAddress = "192.168.0.27";
 MasterServer.port = 23466;
 
+//MasterServer.ipAddress = "67.255.180.25";
+//MasterServer.port = 50005;
+
 function Start(){
 	btnX = Screen.width * 0.05;
 	btnY = Screen.width * 0.05;
@@ -60,7 +63,7 @@ function Start(){
 
 function startServer(){
 
-Network.InitializeServer(9,25001,!Network.MovePublicAddress);
+Network.InitializeServer(9,25001,false);
 MasterServer.RegisterHost(gameName,"Hideous", "Become Hideous...");
 }
 
@@ -192,6 +195,10 @@ function swapPlayerForSpirit (player:GameObject){
 			{
 				child.particleSystem.Play();
 			}
+			else if (child.name == "Point Light")
+			{
+				child.light.enabled = true;
+			}
 			else
 			{
 				var fudge:MeshRenderer = child.GetComponentInChildren(Transform).GetComponentInChildren(MeshRenderer);
@@ -234,6 +241,10 @@ function swapSpiritForPlayer(spirit:GameObject)
 			{
 				child.particleSystem.Stop();
 				child.particleSystem.Clear();
+			}
+			else if (child.name == "Point Light")
+			{
+				child.light.enabled = false;
 			}
 			else
 			{
@@ -308,11 +319,8 @@ function OnGUI(){
 		
 		if(hostData){
 			for(var i:int = 0; i < hostData.length; i++){
-				if(GUI.Button(Rect(btnX * 2 + btnW, btnY * 1.2 + (btnH*i),btnW*3,btnH*0.5),hostData[i].comment)){
-				
-					// CHECK IF PLAYER NAME IS ALREADY ON THE SERVER OR ADD A NUMBER TO THE END IF MULTIPLE.
-					
-				
+				if(GUI.Button(Rect(btnX * 2 + btnW, btnY * 1.2 + (btnH*i),btnW*3,btnH*0.5),hostData[i].comment))
+				{
 					Network.Connect(hostData[i]);
 				}
 			}
