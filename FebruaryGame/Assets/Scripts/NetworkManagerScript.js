@@ -99,6 +99,8 @@ chooseSpiritSpawn();
 	Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity,0);
 	networkView.RPC("leaderboardRecordPlayer", RPCMode.All, stringToEdit);
 	networkView.RPC("IncrementPlayerCount", RPCMode.All);
+	removeShit();
+	Debug.Log("Removed Shit");
 }
 
 function choosePlayerSpawn()
@@ -180,15 +182,18 @@ function swapPlayerForSpirit (player:GameObject){
 	if (player.networkView.isMine)
 	{
 		isAlive = false;
-		Network.Instantiate(CorpsePrefab, player.transform.position, Quaternion.identity, 0);
+		
+		var position:Vector3 = player.transform.position;
 	
 		networkView.RPC("leaderboardRecordEntry", RPCMode.All, stringToEdit);
 		//networkView.RPC("removeShit", RPCMode.All);
-		removeShit();
 		
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
+		Network.Instantiate(CorpsePrefab, position, Quaternion.identity, 0);
+		
+		removeShit();
 		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{			
@@ -211,7 +216,7 @@ function swapPlayerForSpirit (player:GameObject){
 			}
 		}
 		
-				// Tether an untagged spirit to every existing player.
+		// Tether an untagged spirit to every existing player.
 		for (var alive:GameObject in GameObject.FindGameObjectsWithTag("Player"))
 		{
 			if (alive != player && alive.GetComponent("PlayerScript").HasBeenTethered == false)	// Only the player owning the network connection will have a camera enabled.
@@ -221,6 +226,7 @@ function swapPlayerForSpirit (player:GameObject){
 				alive.GetComponent("PlayerScript").HasBeenTethered = true;
 			}
 		}
+		
 	}
 }
 
@@ -257,6 +263,11 @@ function swapSpiritForPlayer(spirit:GameObject)
 				}
 			}
 		}
+		
+		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
+		{
+			corpse.FindChild("CorpseBeam").GetComponentInChildren(MeshRenderer).enabled = true;
+		}
 	}
 }
 
@@ -278,8 +289,7 @@ function OnServerInitialized(){
 }
 
 function OnConnectedToServer(){
-	spawnPlayer();
-	
+	spawnPlayer();	
 	connectedTime = Time.time;
 	networkView.RPC("CheckPlayer", RPCMode.All, stringToEdit, connectedTime);
 	//script.enabled = true;
@@ -441,7 +451,7 @@ function removeShit()
 	{
 		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
 		{
-			corpse.transform.FindChild("CorpseBeam").renderer.enabled = false;
+			corpse.transform.FindChild("CorpseBeam").GetComponentInChildren(MeshRenderer).enabled = false;
 		}
 		
 		// Unspawn spirits.

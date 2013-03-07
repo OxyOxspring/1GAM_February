@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CorpseNommage : MonoBehaviour {
 	
-	public int Nommage = 3;
+	private float Nommage = 5;
 	
 	// Use this for initialization
 	void Start ()
@@ -20,20 +20,26 @@ public class CorpseNommage : MonoBehaviour {
 	[RPC]
 	public void Nom(int amount)
 	{
-		Nommage -= amount;	
+		Nommage -= Time.deltaTime * amount;			
 		
-		if (Nommage <= 0)
+		transform.localScale = new Vector3(1, 1, 1) * (Nommage / 5);
+		Debug.Log (Nommage);
+		if (Nommage <= 0)	// Gone.
 		{
 			audio.Play ();
 			Network.Destroy (gameObject);	
 		}
-		else if (Nommage == 2)
+		else if (Nommage < 33)	// Decomposed.
 		{
-			transform.FindChild ("Head").renderer.enabled = false;	
+
 		}
-		else if (Nommage == 1)
+		else if (Nommage < 66)	// Partially decomposed.
 		{
-			transform.FindChild ("Body").renderer.enabled = false;	
+	
+		}
+		else // Fully composed.
+		{
+			
 		}
 	}
 }
