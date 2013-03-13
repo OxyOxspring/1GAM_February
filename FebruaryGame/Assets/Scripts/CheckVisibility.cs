@@ -110,7 +110,7 @@ public class CheckVisibility : MonoBehaviour
 			if (otherPlayer.transform != transform)
 			{
 				// Check if the other player is in range or lit by a point light.
-				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 13f || IsTransformLit (otherPlayer.transform))
+				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 9f || IsTransformLit (otherPlayer.transform))
 				{
 					// Check if the other player is within the view of this player's camera view.
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))

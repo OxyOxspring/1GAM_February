@@ -16,7 +16,7 @@ public class HeadBobbing : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	
+		transform.FindChild("Spotlight").GetComponent<Light>().enabled = true;
 	}
 	
 	// Update is called once per frame
@@ -62,7 +62,7 @@ public class HeadBobbing : MonoBehaviour
 				bobTimer = 0;	
 			}
 			
-			transform.position = new Vector3(transform.position.x, Player.transform.position.y + Player.transform.localScale.y / 2 + BobAmplitude / crouchFactor * Mathf.Sin (bobTimer), transform.position.z);
+			transform.position = new Vector3(transform.position.x, Player.transform.position.y + Player.transform.localScale.y / 4 + BobAmplitude / crouchFactor * Mathf.Sin (bobTimer), transform.position.z);
 		}
 	}
 			
