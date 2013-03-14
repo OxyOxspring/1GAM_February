@@ -45,6 +45,8 @@ private var btnY:float;
 private var btnW:float;
 private var btnH:float;
 
+private var fogDensity:float;
+
 MasterServer.ipAddress = "192.168.0.27";
 MasterServer.port = 23466;
 
@@ -52,12 +54,16 @@ MasterServer.port = 23466;
 //MasterServer.port = 50005;
 
 function Start(){
+
 	btnX = Screen.width * 0.05;
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
 	
 	Screen.SetResolution(1280, 720, false, 60);
+	
+	fogDensity = RenderSettings.fogDensity;
+	RenderSettings.fogDensity = 0;
 
 }
 
@@ -181,6 +187,8 @@ function swapPlayerForSpirit (player:GameObject){
 
 	if (player.networkView.isMine)
 	{
+		RenderSettings.fogDensity = 0;
+		Debug.Log("SKND");
 		isAlive = false;
 		
 		var position:Vector3 = player.transform.position;
@@ -201,7 +209,7 @@ function swapPlayerForSpirit (player:GameObject){
 			{
 				child.particleSystem.Play();
 			}
-			else if (child.name == "Point Light")
+			else if (child.name == "Light")
 			{
 				child.light.enabled = true;
 			}
@@ -234,6 +242,8 @@ function swapSpiritForPlayer(spirit:GameObject)
 {
 	if (spirit.networkView.isMine)
 	{	
+		RenderSettings.fogDensity = fogDensity;	
+		Debug.Log(fogDensity.ToString() + "Hello: ");
 		isAlive = true;
 		choosePlayerSpawn();
 		PlayerPrefab.transform.FindChild("Graphics").renderer.enabled = false;
@@ -249,7 +259,7 @@ function swapSpiritForPlayer(spirit:GameObject)
 				child.particleSystem.Stop();
 				child.particleSystem.Clear();
 			}
-			else if (child.name == "Point Light")
+			else if (child.name == "Light")
 			{
 				child.light.enabled = false;
 			}
@@ -266,7 +276,7 @@ function swapSpiritForPlayer(spirit:GameObject)
 		
 		for (var corpse:GameObject in GameObject.FindGameObjectsWithTag("Corpse"))
 		{
-			corpse.FindChild("CorpseBeam").GetComponentInChildren(MeshRenderer).enabled = true;
+				corpse.transform.FindChild("CorpseBeam").GetComponentInChildren(MeshRenderer).enabled = true;
 		}
 	}
 }

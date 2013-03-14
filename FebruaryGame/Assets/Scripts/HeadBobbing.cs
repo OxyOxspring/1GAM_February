@@ -16,7 +16,7 @@ public class HeadBobbing : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		transform.FindChild("Spotlight").GetComponent<Light>().enabled = true;
+		
 	}
 	
 	// Update is called once per frame
