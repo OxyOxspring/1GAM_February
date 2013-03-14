@@ -1,16 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CheckVisibility.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\NetworkManagerScript.js">
     <Files>
-      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="113" Column="82" />
+      <File FileName="Assets\Scripts\CheckVisibility.cs" Line="67" Column="25" />
       <File FileName="Assets\Scripts\Lightning.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\SummoningJoinText.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CorpseNommage.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\WibbleScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Leaderboard.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\SpiritScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\HeadBobbing.cs" Line="14" Column="31" />
+      <File FileName="Assets\Scripts\SpiritScript.cs" Line="12" Column="5" />
+      <File FileName="Assets\Scripts\NetworkManagerScript.js" Line="212" Column="28" />
+      <File FileName="Assets\Scripts\HeadBobbing.cs" Line="19" Column="1" />
+      <File FileName="Assets\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" Line="164" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
