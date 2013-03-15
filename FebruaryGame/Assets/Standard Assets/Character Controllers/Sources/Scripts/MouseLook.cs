@@ -29,6 +29,12 @@ public class MouseLook : MonoBehaviour {
 	public float maximumY = 60F;
 
 	float rotationY = 0F;
+	float targetRotationY = 0f;
+	
+	float rotationX = 0f;
+	float targetRotationX = 0f;
+	
+	public float Lerp = 0.2f;
 
 	void Update ()
 	{
@@ -45,12 +51,18 @@ public class MouseLook : MonoBehaviour {
 			}
 			else if (axes == RotationAxes.MouseX)
 			{
-				transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityX, 0);
+				targetRotationX += Input.GetAxis("Mouse X") * sensitivityX;
+				
+				rotationX = Mathf.Lerp (rotationX, targetRotationX, Lerp);
+				
+				transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rotationX, 0);
 			}
 			else
 			{
-				rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
-				rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
+				targetRotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+				targetRotationY = Mathf.Clamp (targetRotationY, minimumY, maximumY);
+				
+				rotationY = Mathf.Lerp (rotationY, targetRotationY, Lerp);
 				
 				transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
 			}

@@ -201,8 +201,6 @@ function swapPlayerForSpirit (player:GameObject){
 		Network.Destroy(player);
 		Network.Instantiate(CorpsePrefab, position, Quaternion.identity, 0);
 		
-		removeShit();
-		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{			
 			if (child.name == "SmokeRing")
@@ -236,6 +234,8 @@ function swapPlayerForSpirit (player:GameObject){
 		}
 		
 	}
+	
+	removeShit();
 }
 
 function swapSpiritForPlayer(spirit:GameObject)

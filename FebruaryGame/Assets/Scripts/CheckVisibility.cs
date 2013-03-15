@@ -5,6 +5,8 @@ public class CheckVisibility : MonoBehaviour
 {
 	public Camera CameraObject;
 	public AudioSource InsaneNoise;
+	public AudioSource JumpNoiseLocal;
+	public AudioSource JumpNoiseGlobal;
 	public float CameraShake = 0.2f;
 	public float Insanity = 0;
 	public float InsanityRate = 90;
@@ -99,8 +101,7 @@ public class CheckVisibility : MonoBehaviour
 		Plane[] planes = GeometryUtility.CalculateFrustumPlanes(CameraObject);
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 			
-		// Reset the isLookingAtSomeone variable.
-		IsLookingAtSomeone = false;
+		bool found = false;
 		
 		foreach (GameObject otherPlayer in players)
 		{
@@ -110,7 +111,7 @@ public class CheckVisibility : MonoBehaviour
 			if (otherPlayer.transform != transform)
 			{
 				// Check if the other player is in range or lit by a point light.
-				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 9f || IsTransformLit (otherPlayer.transform))
+				if (Vector3.Distance (transform.position, otherPlayer.transform.position) < 9.5f || IsTransformLit (otherPlayer.transform))
 				{
 					// Check if the other player is within the view of this player's camera view.
 					if (GeometryUtility.TestPlanesAABB (planes, otherPlayer.collider.bounds))
@@ -120,16 +121,24 @@ public class CheckVisibility : MonoBehaviour
 							
 							Physics.Linecast (transform.position, otherPlayer.transform.position, 1) == false)
 						{
-							IsLookingAtSomeone = true;
-							Debug.DrawLine (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
+							//Debug.DrawLine (transform.position, otherPlayer.transform.position + new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
 							//Debug.DrawLine (transform.position, otherPlayer.transform.position - new Vector3(0, otherPlayer.transform.localScale.y * 0.9f, 0));
-							Debug.DrawLine (transform.position, otherPlayer.transform.position);
+							//Debug.DrawLine (transform.position, otherPlayer.transform.position);
+							
+							found = true;
+							
+							if (IsLookingAtSomeone == false)
+							{
+								networkView.RPC ("Yelp", RPCMode.All);
+							}
 							break;
 						}
 					}
 				}
 			}
 		}
+		
+		IsLookingAtSomeone = found;
 	}
 	
 	void HandleSanity()
@@ -142,10 +151,10 @@ public class CheckVisibility : MonoBehaviour
 		}
 		else
 		{
-			if (Insanity > 0)
+			if (Insanity > 1)
 			{
 				Insanity -= Time.deltaTime * InsanityRate;
-				audiolevel -= Mathf.CeilToInt(Time.deltaTime);
+				audiolevel -= Mathf.CeilToInt(Time.deltaTime) * 2;
 			}
 			else
 			{
@@ -250,5 +259,18 @@ public class CheckVisibility : MonoBehaviour
 			
 			eatTimer += Time.deltaTime;
 			over[2].intensity = Mathf.Max(0, over[2].intensity - Time.deltaTime * 20);	
+	}
+	
+	[RPC]
+	public void Yelp()
+	{
+		if (networkView.isMine)	
+		{
+			JumpNoiseLocal.Play ();	
+		}
+		else
+		{
+			JumpNoiseGlobal.Play ();	
+		}
 	}
 }
