@@ -78,13 +78,17 @@ function refreshHostList(){
 	refreshing = true;
 }
 
-function Update(){
-	if(refreshing == true){
-		if(MasterServer.PollHostList().Length > 0){
-		refreshing = false;
-		Debug.Log(MasterServer.PollHostList().Length);
-		hostData = MasterServer.PollHostList(); 
+function Update()
+{
+	if(refreshing == true)
+	{
+		if(MasterServer.PollHostList().Length > 0)
+		{
+			refreshing = false;
+			Debug.Log(MasterServer.PollHostList().Length);
+			hostData = MasterServer.PollHostList(); 
 		}
+
 	}
 	
 	if (Network.isServer)
@@ -95,6 +99,17 @@ function Update(){
 		}
 	}
 	
+	var players:GameObject[] = GameObject.FindGameObjectsWithTag("Player");
+	if (players.Length == 1)
+	{
+		// isAlive will only be true for the client who is alive.
+		if (isAlive)
+		{
+			players[0].SendMessage("Win");
+			GametimerRunning = false;
+			GameTimer = 0;
+		}
+	}
 	
 	killPlayers();
 }
@@ -106,7 +121,6 @@ chooseSpiritSpawn();
 	networkView.RPC("leaderboardRecordPlayer", RPCMode.All, stringToEdit);
 	networkView.RPC("IncrementPlayerCount", RPCMode.All);
 	removeShit();
-	Debug.Log("Removed Shit");
 }
 
 function choosePlayerSpawn()

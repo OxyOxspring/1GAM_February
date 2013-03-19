@@ -6,6 +6,8 @@ public class PlayerScript : MonoBehaviour
 	private float badspawntimer = 0;
 	private GameObject networkManager;
 	public bool HasBeenTethered = false;
+	private float distanceToRealm = 0;
+	public GameObject HolyLight;
 	
 	// Use this for initialization
 	void Start () {
@@ -14,6 +16,7 @@ public class PlayerScript : MonoBehaviour
 			networkManager = GameObject.FindGameObjectWithTag ("NetworkManager");
 			light.enabled = true;
 			transform.Find ("RainBox").particleSystem.Play ();
+		
 		}
 	}
 	
@@ -52,6 +55,31 @@ public class PlayerScript : MonoBehaviour
 				// Disable particle system.
 				spirit.GetComponent<ParticleSystem>().Stop();
 			}
+			
+			if (distanceToRealm != 0)
+			{
+				float progress = (38.41774f - transform.position.y) / distanceToRealm;
+				ScreenOverlay[] overlays = transform.GetComponentsInChildren<ScreenOverlay>();
+				overlays[2].intensity = progress;
+				transform.GetComponent<CharacterController>().enabled = false;
+				transform.position += Vector3.up * Time.deltaTime;
+				RenderSettings.fogDensity = 0;
+			}
+		}
+	}
+	
+	public void Win()
+	{
+		this.GetComponentInChildren<Light>().enabled = false;
+
+		transform.FindChild ("RainBox").particleSystem.Stop ();
+		transform.FindChild ("Fog").particleSystem.Stop ();
+		transform.FindChild ("WibblyWobbly").particleSystem.Play();
+		
+		if (distanceToRealm == 0)
+		{
+			distanceToRealm = 38.41774f - transform.position.y;
+			Instantiate (HolyLight, new Vector3(transform.position.x, 22, transform.position.z), Quaternion.identity);
 		}
 	}
 }

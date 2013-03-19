@@ -34,7 +34,7 @@ public class CheckVisibility : MonoBehaviour
 	
 	public bool Dead
 	{
-		get { return Insanity >= 100 || Hunger >= 100; }
+		get { return Insanity >= 100 || Hunger >= 100 || transform.position.y > 21; }
 	}
 	
 	public static bool IsTransformLit(Transform transform)
