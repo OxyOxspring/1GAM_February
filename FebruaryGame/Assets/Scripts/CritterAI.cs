@@ -36,10 +36,11 @@ public class CritterAI : MonoBehaviour {
 	void Start () 
 	{
 		Wander();
-		moveSpeed = 8f;
+		moveSpeed = 5f;
 		currentState = 0;
 		controller = GetComponent<CharacterController>();
-		nextDelayCount = 40;
+		nextDelayCount = 20;
+		//animation.Play();
 	}
 	
 	void Wander()
@@ -48,7 +49,7 @@ public class CritterAI : MonoBehaviour {
 		wayPoint.x = wayPoint.x + transform.position.x;
 		wayPoint.z = wayPoint.z + transform.position.z;
 	    wayPoint.y = 0;
-		nextDelayCount = Random.Range (30,40);
+		nextDelayCount = Random.Range (10,20);
 	}
 	
 	// Update is called once per frame:
@@ -74,15 +75,15 @@ public class CritterAI : MonoBehaviour {
 				moveDelay++;
 				if (moveDelay >= nextDelayCount)
 				{
-				moveSpeed = 8;
+				moveSpeed = 5;
 					Wander();
 					moveDelay = 0;
 				}
 				
-				Quaternion targetRotation = Quaternion.LookRotation(wayPoint - transform.position);
-		        targetRotation = new Quaternion(0,-targetRotation.y,0,targetRotation.w);
-		      	transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
-   		     	
+				Quaternion rotation = transform.rotation;
+		      	transform.LookAt (transform.position + controller.velocity);
+   		     	Quaternion newRotation = transform.rotation;
+				transform.rotation = Quaternion.Lerp (rotation, newRotation, 0.7f);
   		   	     var delta = wayPoint - transform.position;
       			 delta.Normalize();
 				 controller.SimpleMove(delta * moveSpeed);

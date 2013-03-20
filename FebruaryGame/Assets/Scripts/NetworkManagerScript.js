@@ -36,6 +36,8 @@ var gameName:String = "HideousNetworking";
 private var stringToEdit : String = "";
 private var displayString : String = "";
 private var connectedTime:float = 0;
+private var DirectIP : String = "";
+private var DirectPort : String = "25001";
 
 private var refreshing:boolean = false;
 private var hostData:HostData[];
@@ -44,11 +46,15 @@ private var btnX:float;
 private var btnY:float;
 private var btnW:float;
 private var btnH:float;
+private var btnXPush:float;
+private var btnYPush:float;
 
 private var fogDensity:float;
 
 MasterServer.ipAddress = "192.168.0.27";
 MasterServer.port = 23466;
+
+var customSkin : GUISkin;
 
 //MasterServer.ipAddress = "67.255.180.25";
 //MasterServer.port = 50005;
@@ -59,6 +65,9 @@ function Start(){
 	btnY = Screen.width * 0.05;
 	btnW = Screen.width * 0.1;
 	btnH = Screen.width * 0.1;
+	
+	btnXPush = Screen.width / 3.2;
+	btnYPush = 0;
 	
 	Screen.SetResolution(1280, 720, false, 60);
 	
@@ -339,32 +348,65 @@ function OnMasterServerEvent(mse:MasterServerEvent){
 //GUI
 function OnGUI(){
 	if(!Network.isClient && !Network.isServer){
-	stringToEdit = GUI.TextField(Rect(btnX,btnY,btnW,btnH/5),stringToEdit,12);
+	GUI.skin = customSkin;
+	GUI.Label(Rect(btnXPush + btnX,btnYPush + btnY,btnW/1.5,btnH/5),"Input Username");
+	GUI.Label(Rect(btnXPush + (btnX*4.45),btnYPush + btnY,btnW*0.92,btnH/5), Network.player.ipAddress.ToString() + ":25001");
+	GUI.Label(Rect(btnXPush + btnX,btnYPush + (btnY*1.5),btnW/1.5,btnH/5), "Direct Connect IP");
+	stringToEdit = GUI.TextField(Rect(btnXPush + (btnX *2.4),btnYPush + btnY,btnW/2,btnH/5),stringToEdit,9);
+	GUI.Label(Rect(btnXPush + (btnX *3.45),btnYPush + btnY,btnW/2.1,btnH/5),"    My IP");
+ 	DirectIP = GUI.TextField(Rect(btnXPush + (btnX * 2.4),btnYPush + (btnY*1.5),btnW,btnH/5),DirectIP,20);
+ 	DirectPort = GUI.TextField(Rect(btnXPush + (btnX * 4.45),btnYPush + (btnY * 1.5),btnW*0.92,btnH/5),DirectPort,12);
 		
-		if(GUI.Button(Rect(btnX,btnY * 1.5,btnW,btnH),"Start Server"))
+		var btnStartServer:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*2.5),btnW*1.325,btnH/3),"Start Server");
+		var btnRefreshServers:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*3.3),btnW*2.65,btnH/5),"Refresh Hosts");
+		var btnDirectConnect:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*2.0),btnW*2.65,btnH/5),"Direct Connect");
+		var btnQuit:boolean = GUI.Button (Rect(btnXPush + (btnX*3.8),btnYPush +(btnY*2.5),btnW*1.25,btnH/3),"Quit");
+		 
+		if(stringToEdit != "")
 		{
-			Debug.Log("Starting Server");
-			startServer();
-		}
-		if(GUI.Button(Rect(btnX,btnY * 1.6 + btnH,btnW,btnH),"Refresh Hosts"))
-		{
-			Debug.Log("Refreshing");
-			refreshHostList();
-		}
-		
-		if(hostData){
-			for(var i:int = 0; i < hostData.length; i++){
-				if(GUI.Button(Rect(btnX * 2 + btnW, btnY * 1.2 + (btnH*i),btnW*3,btnH*0.5),hostData[i].comment))
+			if (btnStartServer)
+			{
+				// Start
+				Debug.Log("Starting Server");
+				startServer();
+			}
+			else if (btnRefreshServers)
+			{
+				// Refresh
+				Debug.Log("Refreshing");
+				refreshHostList();
+			}
+			else if (btnDirectConnect)
+			{
+				Network.useNat = true;
+				Network.Connect(DirectIP, 25001);
+			}
+			else if (btnQuit)
+			{
+				// Quit
+			}
+			else
+			{
+				if (hostData)
 				{
-					Network.Connect(hostData[i]);
-				}
+					for (var i:int = 0; i < hostData.Length; i++)
+					{
+						if (hostData[i].connectedPlayers < hostData[i].playerLimit)
+						{
+							if (GUI.Button(Rect(btnXPush + btnX,btnYPush +( btnY * 3.9)+ ((btnY/2)*i) ,btnW*2.65,btnH/5),"Server #" + (i + 1)))
+							{
+								//Connect.
+								Network.Connect(hostData[i]);
+								break;	
+							}
+						}
+					}
+				}		
 			}
 		}
 	}
-	else
-	{
-		GUI.Label(Rect(btnX-30,btnY-40,btnW*4,btnH/5),displayString);
-	}
+
+	
 }
 
 

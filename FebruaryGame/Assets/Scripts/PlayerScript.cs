@@ -58,11 +58,11 @@ public class PlayerScript : MonoBehaviour
 			
 			if (distanceToRealm != 0)
 			{
-				float progress = (38.41774f - transform.position.y) / distanceToRealm;
+				float progress = 1 - ((22 - transform.position.y) / distanceToRealm);
 				ScreenOverlay[] overlays = transform.GetComponentsInChildren<ScreenOverlay>();
-				overlays[2].intensity = progress;
+				overlays[3].intensity = progress * 1f;
 				transform.GetComponent<CharacterController>().enabled = false;
-				transform.position += Vector3.up * Time.deltaTime;
+				transform.position += Vector3.up * Time.deltaTime * 1.5f;
 				RenderSettings.fogDensity = 0;
 			}
 		}
@@ -78,7 +78,7 @@ public class PlayerScript : MonoBehaviour
 		
 		if (distanceToRealm == 0)
 		{
-			distanceToRealm = 38.41774f - transform.position.y;
+			distanceToRealm = 16 - transform.position.y;
 			Instantiate (HolyLight, new Vector3(transform.position.x, 22, transform.position.z), Quaternion.identity);
 		}
 	}
