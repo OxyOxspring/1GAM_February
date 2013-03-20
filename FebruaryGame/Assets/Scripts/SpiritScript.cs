@@ -6,6 +6,8 @@ public class SpiritScript : MonoBehaviour
 	public GameObject TetheredObject;
 	public float FixedYPosition = 0;
 	private float waveTimer = 0;
+	private float fadeTimer = 0;
+	private float fadeDuration = 3;
 	
 	// Use this for initialization
 	void Start ()
@@ -28,17 +30,32 @@ public class SpiritScript : MonoBehaviour
 				
 			}
 			
-			// Invis-players.
-			foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+			
+			if (players.Length > 1)
 			{
-				// Mesh is necessary for players as spirits can be tethered to them. Makes them invisible NOT nonexistent.
-				MeshRenderer mesh = player.GetComponentInChildren<Transform>().GetComponentInChildren<MeshRenderer>();
-				if (mesh != null)
+				// Invis-players.
+				foreach (GameObject player in players)
 				{
-					mesh.enabled = false;
+					// Mesh is necessary for players as spirits can be tethered to them. Makes them invisible NOT nonexistent.
+					MeshRenderer mesh = player.GetComponentInChildren<Transform>().GetComponentInChildren<MeshRenderer>();
+					if (mesh != null)
+					{
+						mesh.enabled = false;
+					}
 				}
 			}
-			
+			else
+			{
+				GameObject[] corpses = GameObject.FindGameObjectsWithTag("Corpse");
+				
+				foreach (GameObject corpse in corpses)
+				{
+					Destroy (corpse);
+					// Need to do this for all players so take it out of the networkview.ismine and use a flag.
+				}
+				fadeTimer = fadeDuration;				
+			}			
 		}
 	}
 	
@@ -47,6 +64,18 @@ public class SpiritScript : MonoBehaviour
 	{
 		if (networkView.isMine)
 		{
+			if (fadeTimer > 0)
+			{
+				fadeTimer -= Time.deltaTime;
+				GetComponentInChildren<ScreenOverlay>().intensity = fadeTimer / fadeDuration;
+			}
+			else
+			{
+				GetComponentInChildren<ScreenOverlay>().intensity = 0;
+				fadeTimer = 0;	
+			}
+			
+			
 			waveTimer += Time.deltaTime;
 			
 			if (waveTimer >= Mathf.PI * 2)

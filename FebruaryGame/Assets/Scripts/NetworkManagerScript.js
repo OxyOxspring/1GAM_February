@@ -63,11 +63,11 @@ function Start(){
 
 	btnX = Screen.width * 0.05;
 	btnY = Screen.width * 0.05;
-	btnW = Screen.width * 0.1;
+	btnW = Screen.width * 0.2;
 	btnH = Screen.width * 0.1;
 	
-	btnXPush = Screen.width / 3.2;
-	btnYPush = 0;
+	btnXPush = Screen.width / 3.7;
+	btnYPush = Screen.height / 4.3;
 	
 	Screen.SetResolution(1280, 720, false, 60);
 	
@@ -222,7 +222,10 @@ function swapPlayerForSpirit (player:GameObject){
 		chooseSpiritSpawn();
 		Network.Instantiate(SpiritPrefab, spiritspawnObject.transform.position, Quaternion.identity, 0);
 		Network.Destroy(player);
-		Network.Instantiate(CorpsePrefab, position, Quaternion.identity, 0);
+		if (player.transform.position.y < 14)
+		{
+			Network.Instantiate(CorpsePrefab, position, Quaternion.identity, 0);
+		}
 		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{			
@@ -348,19 +351,20 @@ function OnMasterServerEvent(mse:MasterServerEvent){
 //GUI
 function OnGUI(){
 	if(!Network.isClient && !Network.isServer){
+	
 	GUI.skin = customSkin;
-	GUI.Label(Rect(btnXPush + btnX,btnYPush + btnY,btnW/1.5,btnH/5),"Input Username");
-	GUI.Label(Rect(btnXPush + (btnX*4.45),btnYPush + btnY,btnW*0.92,btnH/5), Network.player.ipAddress.ToString() + ":25001");
-	GUI.Label(Rect(btnXPush + btnX,btnYPush + (btnY*1.5),btnW/1.5,btnH/5), "Direct Connect IP");
-	stringToEdit = GUI.TextField(Rect(btnXPush + (btnX *2.4),btnYPush + btnY,btnW/2,btnH/5),stringToEdit,9);
-	GUI.Label(Rect(btnXPush + (btnX *3.45),btnYPush + btnY,btnW/2.1,btnH/5),"    My IP");
- 	DirectIP = GUI.TextField(Rect(btnXPush + (btnX * 2.4),btnYPush + (btnY*1.5),btnW,btnH/5),DirectIP,20);
- 	DirectPort = GUI.TextField(Rect(btnXPush + (btnX * 4.45),btnYPush + (btnY * 1.5),btnW*0.92,btnH/5),DirectPort,12);
+	GUI.Label(Rect(btnXPush + (btnX * 1.3) ,btnYPush + btnY,btnW/1.5,btnH/5),"Input Username");
+	GUI.Label(Rect(btnXPush + (btnX*5.7),btnYPush + btnY,btnW*0.92,btnH/5), Network.player.ipAddress.ToString() + ":25001");
+	GUI.Label(Rect(btnXPush + (btnX * 1.3),btnYPush + (btnY*1.5),btnW/1.5,btnH/5), "Direct Connect");
+	stringToEdit = GUI.TextField(Rect(btnXPush + (btnX *2.5),btnYPush + btnY,btnW/1.7,btnH/5),stringToEdit,9);
+	GUI.Label(Rect(btnXPush + (btnX *5),btnYPush + btnY,btnW/2.1,btnH/5),"My IP:");
+ 	DirectIP = GUI.TextField(Rect(btnXPush + (btnX * 2.5),btnYPush + (btnY*1.5),btnW/1.4,btnH/5),DirectIP,20);
+ 	DirectPort = GUI.TextField(Rect(btnXPush + (btnX * 5.7),btnYPush + (btnY * 1.5),btnW*0.5,btnH/5),DirectPort,12);
 		
-		var btnStartServer:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*2.5),btnW*1.325,btnH/3),"Start Server");
-		var btnRefreshServers:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*3.3),btnW*2.65,btnH/5),"Refresh Hosts");
-		var btnDirectConnect:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*2.0),btnW*2.65,btnH/5),"Direct Connect");
-		var btnQuit:boolean = GUI.Button (Rect(btnXPush + (btnX*3.8),btnYPush +(btnY*2.5),btnW*1.25,btnH/3),"Quit");
+		var btnStartServer:boolean = GUI.Button(Rect(btnXPush + (btnX * 1),btnYPush + (btnY*2.7),btnW*0.9,btnH/3),"Start Server");
+		var btnRefreshServers:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*3.5),btnW*1.8,btnH/3),"Refresh Local Servers");
+		var btnDirectConnect:boolean = GUI.Button(Rect(btnXPush + btnX,btnYPush + (btnY*2.0),btnW*1.8,btnH/3),"Direct Connect");
+		var btnQuit:boolean = GUI.Button (Rect(btnXPush + (btnX*4.6),btnYPush +(btnY*2.7),btnW*0.9,btnH/3),"Quit");
 		 
 		if(stringToEdit != "")
 		{
@@ -393,7 +397,7 @@ function OnGUI(){
 					{
 						if (hostData[i].connectedPlayers < hostData[i].playerLimit)
 						{
-							if (GUI.Button(Rect(btnXPush + btnX,btnYPush +( btnY * 3.9)+ ((btnY/2)*i) ,btnW*2.65,btnH/5),"Server #" + (i + 1)))
+							if (GUI.Button(Rect(btnXPush + btnX,btnYPush +( btnY * 4.2)+ ((btnY/2)*i) ,btnW*1.8,btnH/5),"Server #" + (i + 1)))
 							{
 								//Connect.
 								Network.Connect(hostData[i]);
