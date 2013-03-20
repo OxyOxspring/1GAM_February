@@ -66,7 +66,10 @@ public class CheckVisibility : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		GetComponentInChildren<Light>().enabled = true;
+		if (networkView.isMine)
+		{
+			GetComponentInChildren<Light>().enabled = true;
+		}
 	}
 	
 	// Update is called once per frame

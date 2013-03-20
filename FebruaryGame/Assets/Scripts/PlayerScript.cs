@@ -60,6 +60,9 @@ public class PlayerScript : MonoBehaviour
 			{
 				float progress = Mathf.Max(1 - ((22 - transform.position.y) / distanceToRealm), 0);
 				ScreenOverlay[] overlays = transform.GetComponentsInChildren<ScreenOverlay>();
+				overlays[0].intensity = 0;
+				overlays[1].intensity = 0;
+				overlays[2].intensity = 0;
 				overlays[3].intensity = progress * 1f;
 				transform.GetComponent<CharacterController>().enabled = false;
 				transform.position += Vector3.up * Time.deltaTime * 1.25f;
@@ -75,6 +78,8 @@ public class PlayerScript : MonoBehaviour
 		transform.FindChild ("RainBox").particleSystem.Stop ();
 		transform.FindChild ("Fog").particleSystem.Stop ();
 		transform.FindChild ("WibblyWobbly").particleSystem.Play();
+		// Set hunger to 0
+		// Set insanity to 0
 		
 		if (distanceToRealm == 0)
 		{

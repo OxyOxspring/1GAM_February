@@ -50,6 +50,7 @@ private var btnXPush:float;
 private var btnYPush:float;
 
 private var fogDensity:float;
+private var allSpawned:boolean = false;
 
 MasterServer.ipAddress = "192.168.0.27";
 MasterServer.port = 23466;
@@ -108,18 +109,24 @@ function Update()
 		}
 	}
 	
-	var players:GameObject[] = GameObject.FindGameObjectsWithTag("Player");
-	if (players.Length == 1)
+	if (networkView.isMine)
 	{
-		// isAlive will only be true for the client who is alive.
-		if (isAlive)
+		if (allSpawned == true)
 		{
-			players[0].SendMessage("Win");
-			GametimerRunning = false;
-			GameTimer = 0;
+			var players:GameObject[] = GameObject.FindGameObjectsWithTag("Player");
+			if (players.Length == 1)
+			{
+				// isAlive will only be true for the client who is alive.
+				if (isAlive)
+				{
+					players[0].SendMessage("Win");
+					SendMessage("Win");	// THIS MIGHT WORK ARGH I DONT EVEN KNOW
+					GametimerRunning = false;
+					GameTimer = 0;
+				}
+			}
 		}
 	}
-	
 	killPlayers();
 }
 
@@ -211,7 +218,6 @@ function swapPlayerForSpirit (player:GameObject){
 	if (player.networkView.isMine)
 	{
 		RenderSettings.fogDensity = 0;
-		Debug.Log("SKND");
 		isAlive = false;
 		
 		var position:Vector3 = player.transform.position;
@@ -253,9 +259,9 @@ function swapPlayerForSpirit (player:GameObject){
 		{
 			if (alive != player && alive.GetComponent("PlayerScript").HasBeenTethered == false)	// Only the player owning the network connection will have a camera enabled.
 			{
-				var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
-				instance.GetComponent("SpiritScript").SendMessage("Tether", alive);
 				alive.GetComponent("PlayerScript").HasBeenTethered = true;
+				var instance:GameObject = Instantiate(SpiritPrefabUntagged, alive.transform.position, Quaternion.identity);
+				instance.SendMessage("Tether", alive);
 			}
 		}
 		
@@ -276,7 +282,6 @@ function swapSpiritForPlayer(spirit:GameObject)
 		Network.Instantiate(PlayerPrefab, spawnObject.transform.position, Quaternion.identity, 0);
 		PlayerPrefab.transform.FindChild("Graphics").renderer.enabled = true;
 		Network.Destroy(spirit);
-		
 		
 		for (var child:Transform in SpiritRealm.GetComponentsInChildren(Transform))
 		{
@@ -448,6 +453,8 @@ function leaderboardRecordPlayer(player:String)
 @RPC
 function forceAllSpawn()
 {
+	allSpawned = false;
+	
 	if (Network.isServer)
 	{
 		beginTimer();
@@ -456,6 +463,11 @@ function forceAllSpawn()
 	for (var spirit:GameObject in GameObject.FindGameObjectsWithTag("Spirit"))
 	{
 		swapSpiritForPlayer(spirit);
+	}
+	
+	if (GameObject.FindGameObjectsWithTag("Player").Length > 1)
+	{
+		allSpawned = true;
 	}
 	
 	//unspawnallspawns();
@@ -535,7 +547,7 @@ function removeShit()
 			{
 				if (pep_pep == player)
 				{
-					if (player.active == false)
+					if (player != null)
 					{
 						found = true;
 					}

@@ -3,8 +3,7 @@ using System.Collections;
 
 public class WindRotation : MonoBehaviour
 {
-	private float rotation = 0.0f;
-	
+	public int Speed;
 	// Use this for initialization
 	void Start ()
 	{
@@ -14,13 +13,6 @@ public class WindRotation : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		rotation += Time.deltaTime / 200;
-		
-		if (rotation > 2 * Mathf.PI)
-		{
-			rotation = 0.0f;
-		}
-		
-		transform.Rotate(new Vector3(0, rotation,0));
+		transform.Rotate(new Vector3(0, Time.deltaTime * Speed, 0));
 	}
 }

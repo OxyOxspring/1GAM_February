@@ -64,15 +64,18 @@ public class SpiritScript : MonoBehaviour
 	{
 		if (networkView.isMine)
 		{
-			if (fadeTimer > 0)
+			if (transform.position.y > 14f)
 			{
-				fadeTimer -= Time.deltaTime;
-				GetComponentInChildren<ScreenOverlay>().intensity = fadeTimer / fadeDuration;
-			}
-			else
-			{
-				GetComponentInChildren<ScreenOverlay>().intensity = 0;
-				fadeTimer = 0;	
+				if (fadeTimer > 0)
+				{
+					fadeTimer -= Time.deltaTime;
+					GetComponentInChildren<ScreenOverlay>().intensity = fadeTimer / fadeDuration;
+				}
+				else
+				{
+					GetComponentInChildren<ScreenOverlay>().intensity = 0;
+					fadeTimer = 0;	
+				}
 			}
 			
 			
