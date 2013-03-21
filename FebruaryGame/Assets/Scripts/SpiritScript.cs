@@ -4,6 +4,7 @@ using System.Collections;
 public class SpiritScript : MonoBehaviour
 {
 	public GameObject TetheredObject;
+	private bool wasTethered = false;
 	public float FixedYPosition = 0;
 	private float waveTimer = 0;
 	private float fadeTimer = 0;
@@ -96,17 +97,21 @@ public class SpiritScript : MonoBehaviour
 				transform.position = new Vector3(TetheredObject.transform.position.x, TetheredObject.transform.position.y + 0.05f * Mathf.Sin (waveTimer), TetheredObject.transform.position.z);	
 			}
 		}
-		else
+
+		if (TetheredObject != null)
 		{
-			if (TetheredObject != null)
-			{
-				transform.position = new Vector3(TetheredObject.transform.position.x, TetheredObject.transform.position.y, TetheredObject.transform.position.z);
-			}
+			transform.position = new Vector3(TetheredObject.transform.position.x, TetheredObject.transform.position.y, TetheredObject.transform.position.z);
 		}
+		else if (wasTethered == true)
+		{
+			Destroy (gameObject);	
+		}
+		
 	}
 	
 	public void Tether(GameObject tether)
 	{
 		TetheredObject = tether;
+		wasTethered = true;
 	}
 }

@@ -17,6 +17,7 @@ var plrspawn7:GameObject;
 var plrspawn8:GameObject;
 var plrspawn9:GameObject;
 var plrspawn10:GameObject;
+var playersHere:int = 0;
 
 var sprspawn1:GameObject;
 var sprspawn2:GameObject;
@@ -52,8 +53,8 @@ private var btnYPush:float;
 private var fogDensity:float;
 private var allSpawned:boolean = false;
 
-MasterServer.ipAddress = "192.168.0.27";
-MasterServer.port = 23466;
+//MasterServer.ipAddress = "192.168.0.27";
+//MasterServer.port = 23466;
 
 var customSkin : GUISkin;
 
@@ -109,16 +110,19 @@ function Update()
 		}
 	}
 	
-	if (networkView.isMine)
-	{
+	//if (networkView.isMine)
+	//{		
 		if (allSpawned == true)
 		{
+			Debug.Log("AllSpawned = true");
 			var players:GameObject[] = GameObject.FindGameObjectsWithTag("Player");
 			if (players.Length == 1)
 			{
+				Debug.Log("Players Length = 1");
 				// isAlive will only be true for the client who is alive.
 				if (isAlive)
 				{
+					Debug.Log("Is Alive");
 					players[0].SendMessage("Win");
 					SendMessage("Win");	// THIS MIGHT WORK ARGH I DONT EVEN KNOW
 					GametimerRunning = false;
@@ -126,7 +130,14 @@ function Update()
 				}
 			}
 		}
-	}
+		else
+		{
+			if (GameObject.FindGameObjectsWithTag("Player").Length == playersHere)
+			{
+				allSpawned = true;
+			}
+		}
+	//}
 	killPlayers();
 }
 
@@ -460,17 +471,12 @@ function forceAllSpawn()
 		beginTimer();
 	}
 	
+	playersHere = 0;
 	for (var spirit:GameObject in GameObject.FindGameObjectsWithTag("Spirit"))
 	{
 		swapSpiritForPlayer(spirit);
-	}
-	
-	if (GameObject.FindGameObjectsWithTag("Player").Length > 1)
-	{
-		allSpawned = true;
-	}
-	
-	//unspawnallspawns();
+		playersHere++;
+	}	
 }
 
 @RPC
