@@ -71,7 +71,7 @@ function Start(){
 	btnXPush = Screen.width / 3.7;
 	btnYPush = Screen.height / 4.3;
 	
-	Screen.SetResolution(1280, 720, false, 60);
+	//Screen.SetResolution(1280, 720, false, 60);
 	
 	fogDensity = RenderSettings.fogDensity;
 	RenderSettings.fogDensity = 0;
@@ -367,6 +367,15 @@ function OnMasterServerEvent(mse:MasterServerEvent){
 //GUI
 function OnGUI(){
 	if(!Network.isClient && !Network.isServer){
+	
+	btnX = Screen.width * 0.05;
+	btnY = Screen.width * 0.05;
+	btnW = Screen.width * 0.2;
+	btnH = Screen.width * 0.1;
+	
+	btnXPush = Screen.width / 3.7;
+	btnYPush = Screen.height / 4.3;
+	
 	
 	GUI.skin = customSkin;
 	GUI.Label(Rect(btnXPush + (btnX * 1.3) ,btnYPush + btnY,btnW/1.5,btnH/5),"Input Username");
